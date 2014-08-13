@@ -78,7 +78,8 @@ int flink_select_subdevice(flink_t* dev, uint8_t subdev_id, uint8_t exclusive);
 int flink_subdevice_reset(flink_t* dev, uint8_t subdevice_id);
 
 // Analog input
-// TODO
+int flink_analog_in_get_resolution(flink_t* dev, uint8_t subdevice_id, uint32_t* resolution);
+int flink_analog_in_get_value(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t* value);
 
 // Analog output
 // TODO
