@@ -591,6 +591,89 @@ int flink_counter_get_count(flink_t* dev, uint8_t subdevice_id, uint32_t channel
 	return EXIT_SUCCESS;
 }
 
+//Analog Input
+int flink_analog_in_get_resolution(flink_t* dev, uint8_t subdevice_id, uint32_t* resolution){
+	uint32_t offset;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading resolution...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+
+	if(subdevice_id >= dev->nof_subdevices) {
+		flink_error(FLINK_EINVALSUBDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid subdevice id!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_read(dev, subdevice_id, offset, REGISTER_WITH, resolution) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+int flink_analog_in_get_value(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t* value){
+	uint32_t offset;
+	subdevice_t* subdev = NULL;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading adc value...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+	if(subdevice_id >= dev->nof_subdevices) {
+		flink_error(FLINK_EINVALSUBDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid subdevice id!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	subdev = dev->subdevices + subdevice_id;
+	
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH * channel;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_read(dev, subdevice_id, offset, REGISTER_WITH, value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+
+}
+
+
+
+
+
+
 // ############ Internal stuff ############
 int get_subdevices(flink_t* dev) {
 	subdevice_t* subdev = NULL;
