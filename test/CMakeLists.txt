@@ -1,5 +1,8 @@
 include_directories(../include)
 
+add_executable(flink_subDevice_viewer subDevice_viewer.c)
+target_link_libraries(flink_subDevice_viewer flink)
+
 add_executable(flink_test_open_close open_close.c)
 target_link_libraries(flink_test_open_close flink)
 
@@ -14,3 +17,5 @@ target_link_libraries(flink_test_gpio flink)
 
 add_executable(flink_test_counter counter.c)
 target_link_libraries(flink_test_counter flink)
+
+
