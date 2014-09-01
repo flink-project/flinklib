@@ -656,7 +656,7 @@ int flink_analog_in_get_value(flink_t* dev, uint8_t subdevice_id, uint32_t chann
 	
 	// TODO check subdevice type
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH * channel;
+	offset = HEADER_SIZE + SUBHEADER_SIZE + ANALOG_INPUT_FIRST_VALUE_OFFSET + REGISTER_WITH * channel;
 	#if defined(DEBUG)
 		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
 	#endif
@@ -668,7 +668,176 @@ int flink_analog_in_get_value(flink_t* dev, uint8_t subdevice_id, uint32_t chann
 	return EXIT_SUCCESS;
 
 }
+//Watchdog
+int flink_wd_get_baseclock(flink_t* dev, uint8_t subdevice_id, uint32_t* base_clk) {
+	uint32_t offset;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading base clock...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_read(dev, subdevice_id, offset, REGISTER_WITH, base_clk) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
 
+
+int flink_wd_set_counter_reg(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t value){
+	uint32_t offset;
+	subdevice_t* subdev = NULL;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading adc value...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+	if(subdevice_id >= dev->nof_subdevices) {
+		flink_error(FLINK_EINVALSUBDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid subdevice id!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	subdev = dev->subdevices + subdevice_id;
+	
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + WD_FIRST_COUNTER_OFFSET + REGISTER_WITH * channel;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_write(dev, subdevice_id, offset, REGISTER_WITH, &value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+
+}
+
+
+
+int flink_wd_reset_chanel(flink_t* dev, uint8_t subdevice_id, uint32_t channel){
+	uint32_t reg =0;	
+	uint32_t offset;
+	subdevice_t* subdev = NULL;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading adc value...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+	if(subdevice_id >= dev->nof_subdevices) {
+		flink_error(FLINK_EINVALSUBDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid subdevice id!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	subdev = dev->subdevices + subdevice_id;
+	
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + WD_FIRST_COUNTER_OFFSET + subdev->nof_channels * REGISTER_WITH + REGISTER_WITH * channel;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_read(dev, subdevice_id, offset, REGISTER_WITH,&reg) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	reg = reg |0x1;
+
+	if(flink_write(dev, subdevice_id, offset, REGISTER_WITH, &reg) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+
+	return EXIT_SUCCESS;
+}
+int flink_wd_set_clk_pol(flink_t* dev, uint8_t subdevice_id, uint32_t channel,uint8_t clk_pol){
+	uint32_t reg = 0;	
+	uint32_t offset;
+	subdevice_t* subdev = NULL;
+	
+	#if defined(DEBUG)
+		printf("[DEBUG] Reading adc value...\n");
+	#endif
+	
+	if(!valid_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid device!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	
+	if(subdevice_id >= dev->nof_subdevices) {
+		flink_error(FLINK_EINVALSUBDEV);
+		#if defined(DEBUG)
+			printf("[DEBUG]   --> failed, invalid subdevice id!\n");
+		#endif
+		return EXIT_ERROR;
+	}
+	subdev = dev->subdevices + subdevice_id;
+	
+	// TODO check subdevice type
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + WD_FIRST_COUNTER_OFFSET + subdev->nof_channels * REGISTER_WITH + REGISTER_WITH * channel;
+	#if defined(DEBUG)
+		printf("[DEBUG]   --> calculated offset is 0x%x!\n", offset);
+	#endif
+	
+	if(flink_read(dev, subdevice_id, offset, REGISTER_WITH,&reg) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+
+	if(clk_pol == 0){ //rising edge
+		reg = reg & 0xFFFFFFFD;
+	}else{//falling edge
+		reg = reg |0x2;	
+	}
+
+	if(flink_write(dev, subdevice_id, offset, REGISTER_WITH, &reg) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+
+	return EXIT_SUCCESS;
+}
 
 
 
