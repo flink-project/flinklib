@@ -63,13 +63,15 @@ uint8_t valid_subdev(flink_t* dev, subdevice_t* subdev);
 
 // ############ Subdevice operations ############
 
-#define REGISTER_WITH		4		// byte
+#define REGISTER_WITH			4		// byte
 #define HEADER_SIZE			16		// byte
-#define SUBHEADER_SIZE		16		// byte
-#define STATUS_OFFSET		0x0010	// byte
-#define CONFIG_OFFSET		0x0014	// byte
-#define PWM_BASECLK_OFFSET	0x0000	// byte
-#define PWM_FIRSTPWM_OFFSET	0x0004	// byte
+#define SUBHEADER_SIZE			16		// byte
+#define STATUS_OFFSET			0x0010	// byte
+#define CONFIG_OFFSET			0x0014	// byte
+#define PWM_BASECLK_OFFSET		0x0000	// byte
+#define PWM_FIRSTPWM_OFFSET		0x0004	// byte
+#define ANALOG_INPUT_FIRST_VALUE_OFFSET	0x0004	// byte
+#define WD_FIRST_COUNTER_OFFSET		0x0004	// byte
 #define RESET_BIT			0
 
 // General
@@ -99,6 +101,12 @@ int flink_counter_get_count(flink_t* dev, uint8_t subdevice_id, uint32_t channel
 int flink_pwm_get_baseclock(flink_t* dev, uint8_t subdevice_id, uint32_t* frequency);
 int flink_pwm_set_period(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t period);
 int flink_pwm_set_hightime(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t hightime);
+
+// Watchdog
+int flink_wd_get_baseclock(flink_t* dev, uint8_t subdevice_id, uint32_t* base_clk);
+int flink_wd_set_counter_reg(flink_t* dev, uint8_t subdevice_id, uint32_t channel, uint32_t value);
+int flink_wd_reset_chanel(flink_t* dev, uint8_t subdevice_id, uint32_t channel);
+int flink_wd_set_clk_pol(flink_t* dev, uint8_t subdevice_id, uint32_t channel,uint8_t clk_pol);
 
 // ############ Logging/Errorhandling ############
 
