@@ -1,20 +1,23 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <ctype.h>
 
 #include <flinklib.h>
 
 #define DEFAULT_DEV "/dev/flink0"
 
 int main(int argc, char* argv[]) {
-	flink_t* dev;
-	char* dev_name = DEFAULT_DEV;
-	uint8_t subdevice = 2;
-	uint32_t channel = 0;
-	char c;
-	int error = 0;
-	uint8_t output;
-	uint8_t val;
+	flink_dev*    dev;
+	flink_subdev* subdev;
+	char*         dev_name = DEFAULT_DEV;
+	uint8_t       subdevice_id = 0;
+	uint32_t      channel = 0;
+	char          c;
+	int           error = 0;
+	uint8_t       output;
+	uint8_t       val;
 	
 	/* Compute command line arguments */
 	while((c = getopt(argc, argv, "d:s:c:rwhl")) != -1) {
@@ -23,7 +26,7 @@ int main(int argc, char* argv[]) {
 				dev_name = optarg;
 				break;
 			case 's':
-				subdevice = atoi(optarg);
+				subdevice_id = atoi(optarg);
 				break;
 			case 'c':
 				channel = atoi(optarg);
@@ -67,23 +70,25 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	
-	printf("Configuring channel %u of subdevice %u as ", channel, subdevice);
+	subdev = flink_get_subdevice_by_id(dev, subdevice_id);
+	
+	printf("Configuring channel %u of subdevice %u as ", channel, subdevice_id);
 	if(output) {
 		printf("output\n");
 	}
 	else {
 		printf("input\n");
 	}
-	error = flink_dio_set_direction(dev, subdevice, channel, output);
+	error = flink_dio_set_direction(subdev, channel, output);
 	
 	if(error != 0) {
 		printf("Configuring GPIO direction failed!\n");
 		return -1;
 	}
 	
-	printf("Writing %u to channel %u of subdevice %u\n", val, channel, subdevice);
+	printf("Writing %u to channel %u of subdevice %u\n", val, channel, subdevice_id);
 	if(output) { // write
-		error = flink_dio_set_value(dev, subdevice, channel, val);
+		error = flink_dio_set_value(subdev, channel, val);
 		if(error != 0) {
 			printf("Writing value failed!\n");
 			return -1;
@@ -91,7 +96,7 @@ int main(int argc, char* argv[]) {
 	}
 	else { // read
 		uint8_t res;
-		error = flink_dio_get_value(dev, subdevice, channel, &res);
+		error = flink_dio_get_value(subdev, channel, &res);
 		if(error != 0) {
 			printf("Reading value failed!\n");
 			return -1;

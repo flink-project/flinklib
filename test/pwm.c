@@ -1,15 +1,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <ctype.h>
 
 #include <flinklib.h>
 
 #define DEFAULT_DEV "/dev/flink0"
 
 int main(int argc, char* argv[]) {
-	flink_t* dev;
+	flink_dev* dev;
+	flink_subdev* subdev;
 	char* dev_name = DEFAULT_DEV;
-	uint8_t subdevice = 0;
+	uint8_t subdevice_id = 0;
 	uint32_t channel = 0;
 	uint32_t pwm_period = 0;
 	uint32_t pwm_hightime = 0;
@@ -25,7 +28,7 @@ int main(int argc, char* argv[]) {
 				dev_name = optarg;
 				break;
 			case 's':
-				subdevice = atoi(optarg);
+				subdevice_id = atoi(optarg);
 				break;
 			case 'c':
 				channel = atoi(optarg);
@@ -56,11 +59,13 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	
+	subdev = flink_get_subdevice_by_id(dev, subdevice_id);
+	
 	if(print_base_clk) {
-		printf("Reading base clock from subdevice %u...\n", subdevice);
-		error = flink_pwm_get_baseclock(dev, subdevice, &base_clk);
+		printf("Reading base clock from subdevice %u...\n", subdevice_id);
+		error = flink_pwm_get_baseclock(subdev, &base_clk);
 		if(error != 0) {
-			printf("Reading base clock from subdevice %u failed!\n", subdevice);
+			printf("Reading base clock from subdevice %u failed!\n", subdevice_id);
 			return -1;
 		}
 		else{
@@ -70,15 +75,15 @@ int main(int argc, char* argv[]) {
 	
 	if(pwm_period > 0) {
 		printf("Setting PWM period time to %u (0x%x)...\n", pwm_period, pwm_period);
-		error = flink_pwm_set_period(dev, subdevice, channel, pwm_period);
+		error = flink_pwm_set_period(subdev, channel, pwm_period);
 		if(error != 0) {
-			printf("Failed to set period time to %u on channel %u at subdevice %u!\n", pwm_period, channel, subdevice);
+			printf("Failed to set period time to %u on channel %u at subdevice %u!\n", pwm_period, channel, subdevice_id);
 			return -1;
 		}
 		
-		error = flink_pwm_set_hightime(dev, subdevice, channel, pwm_hightime);
+		error = flink_pwm_set_hightime(subdev, channel, pwm_hightime);
 		if(error != 0) {
-			printf("Failed to set hight time to %u on channel %u at subdevice %u!\n", pwm_hightime, channel, subdevice);
+			printf("Failed to set hight time to %u on channel %u at subdevice %u!\n", pwm_hightime, channel, subdevice_id);
 			return -1;
 		}
 	}

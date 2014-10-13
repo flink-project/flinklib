@@ -1,13 +1,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <ctype.h>
 
 #include <flinklib.h>
 
 #define DEFAULT_DEV "/dev/flink0"
 
 int main(int argc, char* argv[]) {
-	flink_t* dev;
+	flink_dev* dev;
 	char* dev_name = DEFAULT_DEV;
 	char c;
 	

@@ -1,11 +1,6 @@
-## Compiler flags
-if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-std=c99")
-endif()
-
 include_directories(../include)
 
-set(FLINK_SRCS flink.c error.c)
+set(FLINK_SRCS base.c lowlevel.c error.c valid.c ain.c counter.c dio.c pwm.c wd.c)
 
 add_library(flink SHARED ${FLINK_SRCS})
 add_library(flink_static ${FLINK_SRCS})

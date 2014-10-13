@@ -8,17 +8,16 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  fLink userspace library                                        *
+ *  fLink userspace library, error handling                        *
  *                                                                 *
  *******************************************************************/
 
-#include "flinklib.h"
+#include "error.h"
 #include <errno.h>
+#include "log.h"
 #include <string.h>
-#include <stdio.h>
 
 __thread int flink_errno = 0;
-uint8_t loglevel = LOGERROR;
 
 char* flinklib_error_strings[] = {
 	"No error",
@@ -33,6 +32,7 @@ char* flinklib_error_strings[] = {
 };
 #define NOF_ERRORS (sizeof(flinklib_error_strings) / sizeof(char*))
 
+
 const char* flink_strerror(int e) {
 	if(e < FLINK_NOERROR || e >= FLINK_NOERROR + NOF_ERRORS) { // not a flink error
 		return strerror(e);
@@ -40,22 +40,24 @@ const char* flink_strerror(int e) {
 	return flinklib_error_strings[e - FLINK_NOERROR];
 }
 
+
 void flink_perror(const char* p) {
 	if(!p) p = "flinklib";
 	fprintf(stderr, "%s: %s\n", p, flink_strerror(flink_errno));
 }
 
+
 void libc_error(void) {
 	flink_errno = errno;
-	if(flink_loglevel > LOGNOTHING){
+	if(PRINT_ERRORS_TO_STDERR){
 		flink_perror("libc error");
 	}
 }
 
+
 void flink_error(int e) {
 	flink_errno = e;
-	if(flink_loglevel > LOGNOTHING){
+	if(PRINT_ERRORS_TO_STDERR){
 		flink_perror("flink error");
 	}
 }
-

@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <getopt.h>
+#include <ctype.h>
 
 #include <flinklib.h>
 
@@ -8,9 +10,10 @@
 #define SIZE 4
 
 int main(int argc, char* argv[]) {
-	flink_t* dev;
+	flink_dev* dev;
+	flink_subdev* subdev;
 	char* dev_name = DEFAULT_DEV;
-	uint8_t subdevice = 0;
+	uint8_t subdevice_id = 0;
 	char c;
 	uint32_t offset;
 	uint32_t value;
@@ -24,7 +27,7 @@ int main(int argc, char* argv[]) {
 				dev_name = optarg;
 				break;
 			case 's':
-				subdevice = atoi(optarg);
+				subdevice_id = atoi(optarg);
 				break;
 			case 'o':
 				offset = atoi(optarg);
@@ -60,17 +63,19 @@ int main(int argc, char* argv[]) {
 		return -1;
 	}
 	
+	subdev = flink_get_subdevice_by_id(dev, subdevice_id);
+	
 	if(write) {
-		printf("Writing 0x%x (%u) to offset 0x%x at subdevice %u on device %s...\n", value, value, offset, subdevice, dev_name);
-		error = flink_write(dev, subdevice, offset, SIZE, &value);
+		printf("Writing 0x%x (%u) to offset 0x%x at subdevice %u on device %s...\n", value, value, offset, subdevice_id, dev_name);
+		error = flink_write(subdev, offset, SIZE, &value);
 		if(dev == NULL) {
 			printf("Failure while writing to device: %u!\n", error);
 			return -1;
 		}
 	}
 	else {
-		printf("Reading from offset 0x%x at subdevice %u on device %s...\n", offset, subdevice, dev_name);
-		error = flink_read(dev, subdevice, offset, SIZE, &value);
+		printf("Reading from offset 0x%x at subdevice %u on device %s...\n", offset, subdevice_id, dev_name);
+		error = flink_read(subdev, offset, SIZE, &value);
 		if(dev == NULL) {
 			printf("Failure while reading from device: %u!\n", error);
 			return -1;
