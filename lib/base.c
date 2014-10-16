@@ -31,6 +31,26 @@
  *******************************************************************/
 
 /**
+ * @brief Read number of subdevices from fink device.
+ * 
+ * @param dev Device to read
+ * @return int Number of flink devices or -1 in case of error.
+ */
+static int read_nof_subdevices(flink_dev* dev) {
+	uint8_t n = 0;
+	
+	dbg_print("reading number of subdevices...\n");
+	
+	if(flink_ioctl(dev, READ_NOF_SUBDEVICES, &n) < 0) {
+		dbg_print("   --> failed!\n");
+		libc_error();
+		return EXIT_ERROR;
+	}
+	dbg_print("  --> %u\n", n);
+	return n;
+}
+
+/**
  * @brief Read header of all subdevices and update flink device.
  * 
  * @param dev flink device to update
@@ -46,7 +66,7 @@ static int get_subdevices(flink_dev* dev) {
 	}
 	
 	// Read nof subdevices
-	dev->nof_subdevices = flink_get_nof_subdevices(dev);
+	dev->nof_subdevices = read_nof_subdevices(dev);
 	
 	// Allocate memory
 	dev->subdevices = calloc(dev->nof_subdevices, sizeof(flink_subdev));
@@ -140,17 +160,13 @@ int flink_close(flink_dev* dev) {
  * @return int Number of flink devices or -1 in case of error.
  */
 int flink_get_nof_subdevices(flink_dev* dev) {
-	int n = 0;
 	
-	dbg_print("reading number of subdevices...\n");
-	
-	if(flink_ioctl(dev, READ_NOF_SUBDEVICES, &n) < 0) {
-		dbg_print("   --> failed!\n");
-		libc_error();
+	if(!validate_flink_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
 		return EXIT_ERROR;
 	}
-	dbg_print("[DEBUG]   --> %u\n", n);
-	return n;
+	
+	return dev->nof_subdevices;
 }
 
 

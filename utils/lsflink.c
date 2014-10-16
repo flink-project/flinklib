@@ -15,15 +15,15 @@ int main(int argc, char* argv[]) {
 	bool       verbose = false;
 	
 	/* Compute command line arguments */
-	char c;
+	int c;
 	while((c = getopt(argc, argv, "d:v")) != -1) {
 		switch(c) {
-			case 'd': // device
+			case 'd': // device file
 				dev_name = optarg;
-				printf("Device: %s\n",optarg);
 				break;
-			case 'v': // verbose
+			case 'v': // verbose mode
 				verbose = true;
+				break;
 			case '?':
 				if(optopt == 'd') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
 				else if(isprint(optopt)) fprintf (stderr, "Unknown option `-%c'.\n", optopt);
@@ -42,7 +42,8 @@ int main(int argc, char* argv[]) {
 	
 	int nof_subdevs = flink_get_nof_subdevices(dev);
 	
-	printf("Subdevices of %s (%d):\n", dev_name, nof_subdevs);
+	printf("Subdevices of %s (%d):\n", dev_name, nof_subdevs, nof_subdevs);
+	
 	for(int i = 0; i < nof_subdevs; i++) {
 		flink_subdev* subdev = flink_get_subdevice_by_id(dev, i);
 		if(subdev) {
@@ -51,21 +52,21 @@ int main(int argc, char* argv[]) {
 			uint32_t memsize     = flink_subdevice_get_memsize(subdev);
 			uint32_t lastaddr    = baseaddr + memsize;
 			uint16_t type        = flink_subdevice_get_type(subdev);
-			uint8_t  subtype     = flink_subdevice_get_type(subdev);
+			uint8_t  subtype     = flink_subdevice_get_subtype(subdev);
 			uint8_t  ifversion   = flink_subdevice_get_ifversion(subdev);
 			uint32_t nofchannels = flink_subdevice_get_nofchannels(subdev);
 			
 			if(verbose) {
 				printf("  %3d:\n", id);
-				printf("       Base address:       0x%8x\n", baseaddr);
-				printf("       Memory size:        0x%8x (%d bytes)\n", memsize, memsize);
-				printf("       Type:               0x%4x (%d)\n", type, type); // TODO print string instead of decimal number
-				printf("       Sub type:           0x%2x (%d)\n", subtype, subtype);
+				printf("       Address range:      0x%08x - 0x%08x\n", baseaddr, lastaddr);
+				printf("       Memory size:        0x%08x (%d bytes)\n", memsize, memsize);
+				printf("       Type:               0x%04x (%d)\n", type, type); // TODO print string instead of decimal number
+				printf("       Sub type:           0x%02x (%d)\n", subtype, subtype);
 				printf("       Interface version:  %d\n", ifversion);
 				printf("       Number of channels: %d\n", nofchannels);
 			}
 			else {
-				printf("  %3d: 0x%x - 0x%x, Type %d.%d-%d, %d channels\n", id, baseaddr, lastaddr, type, subtype, ifversion, nofchannels);
+				printf("  %3d: 0x%08x - 0x%08x, Type %d.%d-%d, %d channels\n", id, baseaddr, lastaddr, type, subtype, ifversion, nofchannels);
 			}
 		}
 	}
