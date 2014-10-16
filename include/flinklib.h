@@ -72,6 +72,7 @@ uint32_t      flink_subdevice_get_memsize(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_nofchannels(flink_subdev* subdev);
 int           flink_subdevice_select(flink_subdev* subdev, uint8_t exclusive);
 int           flink_subdevice_reset(flink_subdev* subdev);
+const char*   flink_subdevice_id2str(uint8_t subdev_id);
 
 // Analog input
 int flink_analog_in_get_resolution(flink_subdev* subdev, uint32_t* resolution);

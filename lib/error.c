@@ -19,7 +19,7 @@
 
 __thread int flink_errno = 0;
 
-char* flinklib_error_strings[] = {
+const char* flinklib_error_strings[] = {
 	"No error",
 	"Unknown error",
 	"Not supported"
