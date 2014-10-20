@@ -3,6 +3,7 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #include <flinklib.h>
 
@@ -14,47 +15,39 @@ int main(int argc, char* argv[]) {
 	char*         dev_name = DEFAULT_DEV;
 	uint8_t       subdevice_id = 0;
 	uint32_t      channel = 0;
-	char          c;
 	int           error = 0;
-	uint8_t       output;
-	uint8_t       val;
+	bool          output;
+	bool          val;
 	
 	/* Compute command line arguments */
+	int c;
 	while((c = getopt(argc, argv, "d:s:c:rwhl")) != -1) {
 		switch(c) {
-			case 'd': // device
+			case 'd': // device file
 				dev_name = optarg;
 				break;
-			case 's':
+			case 's': // subdevice id
 				subdevice_id = atoi(optarg);
 				break;
-			case 'c':
+			case 'c': // channel
 				channel = atoi(optarg);
 				break;
-			case 'r':
-				output = 0;
+			case 'r': // read
+				output = false;
 				break;
-			case 'w':
-				output = 1;
+			case 'w': // write
+				output = true;
 				break;
-			case 'h':
-				if(!output) {
-					fprintf(stderr, "You can not set a value for an digital input");
-				}
-				else {
-					val = 1;
-				}
+			case 'h': // set output high
+				if(!output) fprintf(stderr, "You can not set a value for an digital input");
+				else val = true;
 				break;
-			case 'l':
-				if(!output) {
-					fprintf(stderr, "You can not set a value for an digital input");
-				}
-				else {
-					val = 0;
-				}
+			case 'l': // set output low
+				if(!output) fprintf(stderr, "You can not set a value for an digital input");
+				else val = false;
 				break;
 			case '?':
-				if(optopt == 'd' || optopt == 'c' || optopt == 'p') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
+				if(optopt == 'd' || optopt == 's' || optopt == 'c') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
 				else if(isprint(optopt)) fprintf (stderr, "Unknown option `-%c'.\n", optopt);
 				else fprintf(stderr, "Unknown option character `\\x%x'.\n", optopt);
 				return -1;
@@ -63,31 +56,33 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	printf("Opening device %s...\n", dev_name);
+	// Open flink device
 	dev = flink_open(dev_name);
 	if(dev == NULL) {
-		printf("Failed to open device!\n");
+		fprintf(stderr, "Failed to open device %s!\n", dev_name);
 		return -1;
 	}
 	
+	// Get a pointer to the choosen subdevice
 	subdev = flink_get_subdevice_by_id(dev, subdevice_id);
+	if(subdev == NULL) {
+		fprintf(stderr, "Illegal subdevice id %d!\n", subdevice_id);
+		return -1;
+	}
 	
+	// Set I/O direction
 	printf("Configuring channel %u of subdevice %u as ", channel, subdevice_id);
-	if(output) {
-		printf("output\n");
-	}
-	else {
-		printf("input\n");
-	}
+	if(output) printf("output\n");
+	else printf("input\n");
 	error = flink_dio_set_direction(subdev, channel, output);
-	
 	if(error != 0) {
 		printf("Configuring GPIO direction failed!\n");
 		return -1;
 	}
 	
-	printf("Writing %u to channel %u of subdevice %u\n", val, channel, subdevice_id);
+	// Read or write I/O
 	if(output) { // write
+		printf("Writing %u to channel %u of subdevice %u\n", val, channel, subdevice_id);
 		error = flink_dio_set_value(subdev, channel, val);
 		if(error != 0) {
 			printf("Writing value failed!\n");
@@ -106,7 +101,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	
-	printf("Closing device %s...\n", dev_name);
+	// Close flink device
 	flink_close(dev);
 	
     return EXIT_SUCCESS;

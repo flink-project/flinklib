@@ -52,7 +52,7 @@ int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period
 int flink_pwm_set_hightime(flink_subdev* subdev, uint32_t channel, uint32_t hightime) {
 	uint32_t offset;
 		
-	printf("Setting PWM hight time for channel %d on subdevice %d\n", subdev->id, channel);
+	dbg_print("Setting PWM hight time for channel %d on subdevice %d\n", subdev->id, channel);
 	
 	offset = HEADER_SIZE + SUBHEADER_SIZE + PWM_FIRSTPWM_OFFSET + subdev->nof_channels * REGISTER_WITH + REGISTER_WITH * channel;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);

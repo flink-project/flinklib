@@ -2,3 +2,12 @@ include_directories(../include)
 
 add_executable(lsflink lsflink.c)
 target_link_libraries(lsflink flink)
+
+add_executable(flinkdio flinkdio.c)
+target_link_libraries(flinkdio flink)
+
+add_executable(flinkpwm flinkpwm.c)
+target_link_libraries(flinkpwm flink)
+
+add_executable(flinkcounter flinkcounter.c)
+target_link_libraries(flinkcounter flink)
