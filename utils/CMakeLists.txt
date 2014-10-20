@@ -11,3 +11,6 @@ target_link_libraries(flinkpwm flink)
 
 add_executable(flinkcounter flinkcounter.c)
 target_link_libraries(flinkcounter flink)
+
+add_executable(flinkwd flinkwd.c)
+target_link_libraries(flinkwd flink)

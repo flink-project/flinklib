@@ -21,14 +21,17 @@ int main(int argc, char* argv[]) {
 	char*         dev_name = DEFAULT_DEV;
 	uint8_t       subdevice_id = 0;
 	uint32_t      channel = 0;
-	uint32_t      value = 0;
+	int           time = 10; // [ms]
 	uint32_t      repeat = 1;
-	uint32_t      sleep_time = 1000; // [ms]
+	uint32_t      counter;
+	uint32_t      base_clk;
+	bool          verbose = false;
+	bool          first = true;
 	int           error = 0;
 	
 	/* Compute command line arguments */
 	int c;
-	while((c = getopt(argc, argv, "d:s:c:n:t:r")) != -1) {
+	while((c = getopt(argc, argv, "d:s:c:t:v")) != -1) {
 		switch(c) {
 			case 'd': // device file
 				dev_name = optarg;
@@ -42,12 +45,15 @@ int main(int argc, char* argv[]) {
 			case 'n': // number of repeats
 				repeat = atoi(optarg);
 				break;
-			case 't': // time to sleep between reading
-				sleep_time = atoi(optarg);
-				if(sleep_time < 50 || sleep_time > 10000) {
-					fprintf(stderr, "Please enter a time in ms (between 50 ms and 10 s)!\n");
+			case 't': // WD timeout
+				time = atoi(optarg);
+				if(time < 0 || time > 3600000) {
+					fprintf(stderr, "Please enter the timeout in ms (milliseconds)!\n");
 					return EPARAM;
 				}
+				break;
+			case 'v':
+				verbose = true;
 				break;
 			case '?':
 				if(optopt == 'd' || optopt == 's' || optopt == 'c' || optopt == 'n' || optopt == 't') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -73,25 +79,49 @@ int main(int argc, char* argv[]) {
 		return ESUBDEVID;
 	}
 	
-	// Reset subdevice
-	error = flink_subdevice_reset(subdev);
+	// Read the subdevice base clock
+	error = flink_pwm_get_baseclock(subdev, &base_clk);
 	if(error != 0) {
-		fprintf(stderr, "Reseting subdevice %d failed!\n", subdevice_id);
-		return EWRITE;
+		printf("Reading subdevice base clock failed!\n");
+		return EREAD;
+	}
+	if(verbose) {
+		printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
 	}
 	
+	// Read the subdevice base clock
+	error = flink_pwm_get_baseclock(subdev, &base_clk);
+	if(error != 0) {
+		printf("Reading subdevice base clock failed!\n");
+		return EREAD;
+	}
+	if(verbose) {
+		printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
+	}
+	
+	// Calculate the counter value for the given timeout
+	counter = (base_clk * time) / 1000;
+	
 	// Read counter value
-	printf("Reading counter value(s):\n");
+	printf("Writing counter register:\n");
 	while(repeat-- > 0) {
-		error = flink_counter_get_count(subdev, channel, &value);
+		error = flink_wd_set_counter(subdev, counter);
 		if(error != 0) {
 			fprintf(stderr, "stderr, Reading counter failed!\n");
 			return EREAD;
 		}
-		else {
-			printf("%u (0x%x)\n", value, value);
+		if(first) {
+			error = flink_wd_arm(subdev);
+			if(error != 0) {
+				fprintf(stderr, "stderr, Arming WD failed!\n");
+				return EWRITE;
+			}
+			else {
+				printf("WD armed");
+			}
+			first = false;
 		}
-		usleep(1000 * sleep_time); 
+		usleep(1000 * time); 
 	}
 	
 	// Close flink device

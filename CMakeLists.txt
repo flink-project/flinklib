@@ -3,7 +3,7 @@ project(flinklib)
 
 ## Compiler flags
 if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-std=c99")
+	set(CMAKE_C_FLAGS "-std=gnu99")
 endif()
 
 add_subdirectory(lib)
