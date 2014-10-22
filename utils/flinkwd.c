@@ -20,7 +20,6 @@ int main(int argc, char* argv[]) {
 	flink_subdev* subdev;
 	char*         dev_name = DEFAULT_DEV;
 	uint8_t       subdevice_id = 0;
-	uint32_t      channel = 0;
 	int           time = 10; // [ms]
 	uint32_t      repeat = 1;
 	uint32_t      counter;
@@ -31,16 +30,13 @@ int main(int argc, char* argv[]) {
 	
 	/* Compute command line arguments */
 	int c;
-	while((c = getopt(argc, argv, "d:s:c:t:v")) != -1) {
+	while((c = getopt(argc, argv, "d:s:n:t:v")) != -1) {
 		switch(c) {
 			case 'd': // device file
 				dev_name = optarg;
 				break;
 			case 's': // subdevice id
 				subdevice_id = atoi(optarg);
-				break;
-			case 'c': // channel
-				channel = atoi(optarg);
 				break;
 			case 'n': // number of repeats
 				repeat = atoi(optarg);

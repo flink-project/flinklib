@@ -44,7 +44,7 @@ const char* flink_subdev_type_strings[] = {
 #define NOF_KNOWNSUBDEVIDS (sizeof(flink_subdev_type_strings) / sizeof(char*))
 
 
-const char* flink_subdevice_id2str(uint8_t id) {
+const char* flink_subdevice_id2str(uint16_t id) {
 	if(id > NOF_KNOWNSUBDEVIDS - 1) { // unknown subdevice id
 		return "unknown";
 	}
