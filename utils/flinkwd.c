@@ -43,8 +43,8 @@ int main(int argc, char* argv[]) {
 				break;
 			case 't': // WD timeout
 				time = atoi(optarg);
-				if(time < 0 || time > 3600000) {
-					fprintf(stderr, "Please enter the timeout in ms (milliseconds)!\n");
+				if(time < 0 || time > 500) {
+					fprintf(stderr, "Please enter the timeout in ms (max. 499 ms).\n");
 					return EPARAM;
 				}
 				break;
@@ -85,25 +85,18 @@ int main(int argc, char* argv[]) {
 		printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
 	}
 	
-	// Read the subdevice base clock
-	error = flink_pwm_get_baseclock(subdev, &base_clk);
-	if(error != 0) {
-		printf("Reading subdevice base clock failed!\n");
-		return EREAD;
-	}
-	if(verbose) {
-		printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
-	}
-	
 	// Calculate the counter value for the given timeout
-	counter = (base_clk * time) / 1000;
+	counter = (uint32_t)(((long)base_clk * (long)time) / 1000);
+	if(verbose) {
+		printf("Calculated counter value: %u\n", counter);
+	}
 	
 	// Read counter value
-	printf("Writing counter register:\n");
+	printf("WD active:\n");
 	while(repeat-- > 0) {
 		error = flink_wd_set_counter(subdev, counter);
 		if(error != 0) {
-			fprintf(stderr, "stderr, Reading counter failed!\n");
+			fprintf(stderr, "stderr, Writing counter failed!\n");
 			return EREAD;
 		}
 		if(first) {
@@ -113,12 +106,17 @@ int main(int argc, char* argv[]) {
 				return EWRITE;
 			}
 			else {
-				printf("WD armed");
+				if(verbose) printf("WD armed\n");
 			}
 			first = false;
 		}
-		usleep(1000 * time); 
+		if(verbose) {
+			printf(".");
+			fflush(stdout);
+		}
+		usleep(800 * time); // retrigger after 80% of the given time
 	}
+	if(verbose) printf("\n");
 	
 	// Close flink device
 	flink_close(dev);
