@@ -4,6 +4,7 @@
 #include <getopt.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <sched.h>
 
 #include <flinklib.h>
 
@@ -26,11 +27,12 @@ int main(int argc, char* argv[]) {
 	uint32_t      base_clk;
 	bool          verbose = false;
 	bool          first = true;
+	bool          rt = false;
 	int           error = 0;
 	
 	/* Compute command line arguments */
 	int c;
-	while((c = getopt(argc, argv, "d:s:n:t:v")) != -1) {
+	while((c = getopt(argc, argv, "d:s:n:t:v:r")) != -1) {
 		switch(c) {
 			case 'd': // device file
 				dev_name = optarg;
@@ -50,6 +52,9 @@ int main(int argc, char* argv[]) {
 				break;
 			case 'v':
 				verbose = true;
+				break;
+			case 'r':
+				rt = true;
 				break;
 			case '?':
 				if(optopt == 'd' || optopt == 's' || optopt == 'c' || optopt == 'n' || optopt == 't') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -89,6 +94,16 @@ int main(int argc, char* argv[]) {
 	counter = (uint32_t)(((long)base_clk * (long)time) / 1000);
 	if(verbose) {
 		printf("Calculated counter value: %u\n", counter);
+	}
+	
+	if(rt) {
+		struct sched_param schedulingParam;
+		schedulingParam.sched_priority = 49;
+		if(sched_setscheduler(0, SCHED_RR, &schedulingParam) == -1) {
+			fprintf(stderr, "Error while setting scheduler parameters\n");
+			return -1;
+		}
+		verbose = false;
 	}
 	
 	// Read counter value
