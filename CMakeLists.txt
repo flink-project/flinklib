@@ -18,3 +18,5 @@ endif(DOXYGEN_FOUND)
 add_subdirectory(lib)
 add_subdirectory(utils)
 add_subdirectory(test)
+
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/flinklib.h ${CMAKE_CURRENT_SOURCE_DIR}/include/flinkioctl.h DESTINATION include)
