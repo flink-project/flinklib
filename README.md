@@ -7,6 +7,5 @@ This documentation is intended for developers to understand the internals of the
 
 ## Documentation
 - [Overview](doc/overview.md)
-
 - [Build instructions](doc/build.md)
 - [Helper tools](doc/utils.md)
