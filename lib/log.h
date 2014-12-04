@@ -12,6 +12,12 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file log.h
+ *  @brief Debug utilities.
+ *
+ *  @author Martin Züger
+ */
+
 #ifndef FLINKLIB_LOGGING_H_
 #define FLINKLIB_LOGGING_H_
 

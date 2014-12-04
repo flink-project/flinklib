@@ -12,6 +12,12 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file error.c
+ *  @brief Error handling.
+ *
+ *  @author Martin Züger
+ */
+
 #include "error.h"
 #include <errno.h>
 #include "log.h"

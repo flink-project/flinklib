@@ -51,22 +51,22 @@ int main(int argc, char* argv[]) {
 			uint32_t baseaddr    = flink_subdevice_get_baseaddr(subdev);
 			uint32_t memsize     = flink_subdevice_get_memsize(subdev);
 			uint32_t lastaddr    = baseaddr + memsize - 1;
-			uint16_t type        = flink_subdevice_get_type(subdev);
-			uint8_t  subtype     = flink_subdevice_get_subtype(subdev);
-			uint8_t  ifversion   = flink_subdevice_get_ifversion(subdev);
+			uint16_t func        = flink_subdevice_get_function(subdev);
+			uint8_t  subfunc     = flink_subdevice_get_subfunction(subdev);
+			uint8_t  func_ver    = flink_subdevice_get_function_version(subdev);
 			uint32_t nofchannels = flink_subdevice_get_nofchannels(subdev);
 			
 			if(verbose) {
 				printf("  %3d:\n", id);
 				printf("       Address range:      0x%08x - 0x%08x\n", baseaddr, lastaddr);
 				printf("       Memory size:        0x%08x (%d bytes)\n", memsize, memsize);
-				printf("       Type:               0x%04x (%s)\n", type, flink_subdevice_id2str(type));
-				printf("       Sub type:           0x%02x (%d)\n", subtype, subtype);
-				printf("       Interface version:  %d\n", ifversion);
+				printf("       Function:           0x%04x (%s)\n", func, flink_subdevice_id2str(func));
+				printf("       Sub function:       0x%02x (%d)\n", subfunc, subfunc);
+				printf("       Function version:   %d\n", func_ver);
 				printf("       Number of channels: %d\n", nofchannels);
 			}
 			else {
-				printf("  %3d: 0x%08x - 0x%08x, Type %d.%d-%d, %d channels\n", id, baseaddr, lastaddr, type, subtype, ifversion, nofchannels);
+				printf("  %3d: 0x%08x - 0x%08x, Type %d.%d-%d, %d channels\n", id, baseaddr, lastaddr, func, subfunc, func_ver, nofchannels);
 			}
 		}
 	}

@@ -12,6 +12,12 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file error.h
+ *  @brief Error handling.
+ *
+ *  @author Martin Züger
+ */
+
 #ifndef FLINKLIB_ERROR_H_
 #define FLINKLIB_ERROR_H_
 

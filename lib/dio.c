@@ -8,10 +8,19 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  flink userspace library, subdevice type "digital I/O"          *
+ *  flink userspace library, subdevice function "digital I/O"      *
  *                                                                 *
  *******************************************************************/
  
+/** @file dio.c
+ *  @brief flink userspace library, subdevice function "digital I/O".
+ *
+ *  Contains the high-level functions for a flink subdevice
+ *  which realizes the function "digital I/O".
+ *
+ *  @author Martin Züger
+ */
+
 #include "flinklib.h"
 #include "types.h"
 #include "error.h"
@@ -19,6 +28,13 @@
 
 #include <stdint.h>
 
+/**
+ * @brief Configures a channel as input or output
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param output: Value, a value of nonzero configures the channel as output.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t output) {
 	uint32_t offset;
 	uint8_t bit;
@@ -38,6 +54,13 @@ int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t outp
 	return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Sets a output channel to a value
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param output: A value of nonzero sets the channel.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_dio_set_value(flink_subdev* subdev, uint32_t channel, uint8_t value) {
 	uint32_t offset;
 	uint8_t bit;
@@ -59,6 +82,13 @@ int flink_dio_set_value(flink_subdev* subdev, uint32_t channel, uint8_t value) {
 	return EXIT_SUCCESS;
 }
 
+/**
+ * @brief Reads an input channel
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Contains a value of nonzero if the input is set.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_dio_get_value(flink_subdev* subdev, uint32_t channel, uint8_t* value) {
 	uint32_t offset;
 	uint8_t bit;

@@ -12,6 +12,12 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file valid.h
+ *  @brief Contains validation functions for flink.
+ *
+ *  @author Martin Züger
+ */
+
 #ifndef FLINKLIB_VALID_H_
 #define FLINKLIB_VALID_H_
 

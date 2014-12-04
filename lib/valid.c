@@ -12,8 +12,19 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file valid.c
+ *  @brief Contains validation functions for flink.
+ *
+ *  @author Martin Züger
+ */
+
 #include "valid.h"
 
+/**
+ * @brief Checks if flink device was opened.
+ * @param dev: Flink device.
+ * @return int: 1 if valid, 0 if not valid.
+ */
 int validate_flink_dev(flink_dev* dev) {
 	if(dev && dev->fd != 0) {
 		return 1; // device struct valid
@@ -21,6 +32,11 @@ int validate_flink_dev(flink_dev* dev) {
 	return 0;
 }
 
+/**
+ * @brief Checks if flink subdevice belongs to device and has one or more channels.
+ * @param dev: Flink subdevice.
+ * @return int: 1 if valid, 0 if not valid.
+ */
 int validate_flink_subdev(flink_subdev* subdev) {
 	if(subdev->parent && subdev->nof_channels > 0) {
 		return 1; // subdevice struct valid

@@ -12,9 +12,17 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file subdevtypes.c
+ *  @brief flink userspace library, strings for subdevice functions.
+ *
+ *  This header file contains string definitions for subdevice function id's.
+ *
+ *  @author Martin Züger
+ */
+
 #include <stdint.h>
 
-const char* flink_subdev_type_strings[] = {
+const char* flink_subdev_function_strings[] = {
 	"Info",                         // 0x00
 	"Analog input",                 // 0x01
 	"Analog output",                // 0x02
@@ -41,12 +49,12 @@ const char* flink_subdev_type_strings[] = {
 	"unknown",                      // 0x18
 	"unknown",                      // 0x19
 };
-#define NOF_KNOWNSUBDEVIDS (sizeof(flink_subdev_type_strings) / sizeof(char*))
+#define NOF_KNOWNSUBDEVIDS (sizeof(flink_subdev_function_strings) / sizeof(char*))
 
 
 const char* flink_subdevice_id2str(uint16_t id) {
 	if(id > NOF_KNOWNSUBDEVIDS - 1) { // unknown subdevice id
 		return "unknown";
 	}
-	return flink_subdev_type_strings[id];
+	return flink_subdev_function_strings[id];
 }

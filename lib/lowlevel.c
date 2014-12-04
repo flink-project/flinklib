@@ -12,6 +12,17 @@
  *                                                                 *
  *******************************************************************/
  
+/** @file lowlevel.c
+ *  @brief Contains low level operations for flink.
+ *
+ *  Contains functions to read from and write to the memory bank of
+ *  flink devices directly. These functions can be used to communicate
+ *  with user-defined flink subdevices.
+ *
+ *  @author Martin Züger
+ *  @author Urs Graf
+ */
+
 #include "flinklib.h"
 #include "flinkioctl.h"
 #include "types.h"
@@ -24,12 +35,11 @@
 
 
 /**
- * @brief IOCTL operation for a flink device
- * 
- * @param dev Flink device handle
- * @param cmd IOCTL command
- * @param arg IOCTL arguments
- * @return int IOCTL return value or -1 in case of failure.
+ * @brief IOCTL operation for a flink device.
+ * @param dev: Flink device handle.
+ * @param cmd: IOCTL command.
+ * @param arg: IOCTL arguments.
+ * @return int: IOCTL return value or -1 in case of failure.
  */
 int flink_ioctl(flink_dev* dev, int cmd, void* arg) {
 	int ret;
@@ -52,12 +62,11 @@ int flink_ioctl(flink_dev* dev, int cmd, void* arg) {
 
 /**
  * @brief Read from a flink subdevice.
- * 
- * @param subdev Subdevice to read from.
- * @param offset Offset where to read, relative to the subdevice base.
- * @param size Bytes to read.
- * @param rdata Pointer to a buffer where the read bits should be written
- * @return ssize_t Bytes read from the subdevcie or a negative error code.
+ * @param subdev: Subdevice to read from.
+ * @param offset: Read offset, relative to the subdevice base address.
+ * @param size: Nof bytes to read.
+ * @param rdata: Pointer to a buffer where the read bytes are written to.
+ * @return ssize_t: Nof bytes read from the subdevcie or a negative error code.
  */
 ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rdata) {
 	int res = 0;
@@ -99,13 +108,12 @@ ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rd
 
 
 /**
- * @brief ...
- * 
- * @param subdev Subdevice to write to.
- * @param offset Offset where to write, relative to the subdevice base.
- * @param size Bytes to write.
- * @param wdata Data to write.
- * @return ssize_t Bytes written or a negative error code.
+ * @brief Write to a flink subdevice.
+ * @param subdev: Subdevice to write to.
+ * @param offset: Write offset, relative to the subdevice base address.
+ * @param size: Nof bytes to write.
+ * @param wdata: Data to write.
+ * @return ssize_t: Nof bytes written or -1 in case of error.
  */
 ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* wdata) {
 	int res = 0;
@@ -148,12 +156,11 @@ ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* w
 
 /**
  * @brief Read a single bit from a flink subdevice
- * 
- * @param subdev Subdevice to read from.
- * @param offset Offset where to read, relative to the subdevice base.
- * @param bit Bit to read in the byte given by offset.
- * @param rdata Pointer to a buffer where the bit read should be written
- * @return int 0 on succes, else -1.
+ * @param subdev: Subdevice to read from.
+ * @param offset: Read offset, relative to the subdevice base address.
+ * @param bit: Bit number to read in the byte given by offset.
+ * @param rdata: Pointer to a buffer where the bit read should be written
+ * @return int: 0 on succes, else -1.
  */
 int flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* rdata) {
 	ioctl_bit_container_t ioctl_arg;
@@ -192,11 +199,10 @@ int flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* rda
 
 /**
  * @brief Write a single bit to a flink subdevice
- * 
- * @param subdev Subdevice to write to.
- * @param offset Offset where to write, relative to the subdevice base.
- * @param bit Bit to write in the byte given by offset.
- * @param wdata Bit to write
+ * @param subdev: Subdevice to write to.
+ * @param offset: Write offset, relative to the subdevice base address.
+ * @param bit: Bit number to write in the byte given by offset.
+ * @param wdata: Bit to write, a value of nonzero sets the bit, 0 clears the bit
  * @return int
  */
 int flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* wdata) {

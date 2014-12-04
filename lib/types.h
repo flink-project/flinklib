@@ -12,6 +12,13 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file types.h
+ *  @brief Data structures for flink devices and subdevices.
+ *
+ *  @author Martin Züger
+ *  @author Urs Graf
+ */
+
 #ifndef FLINKLIB_TYPES_H_
 #define FLINKLIB_TYPES_H_
 
@@ -19,20 +26,20 @@
 #include "flinklib.h"
 
 struct _flink_dev {
-	int            fd;
-	uint8_t        nof_subdevices;
-	flink_subdev*  subdevices;
+	int            fd;					/// File descriptor of open flink device file
+	uint8_t        nof_subdevices;		/// Number of subdevices
+	flink_subdev*  subdevices;			/// Linked list of all subdevices of a device
 };
 
 struct _flink_subdev {
-	uint8_t        id;
-	uint16_t       type_id;
-	uint8_t        sub_type_id;
-	uint8_t        if_version;
-	uint32_t       base_addr;
-	uint32_t       mem_size;
-	uint32_t       nof_channels;
-	flink_dev*     parent;
+	uint8_t        id;					/// Identifies a subdevice within a device
+	uint16_t       function_id;			/// Identifies the function of the subdevice
+	uint8_t        sub_function_id;		/// Identifies the subtype of the subdevice
+	uint8_t        function_version;	/// Version of the function
+	uint32_t       base_addr;			/// Base address (logical)
+	uint32_t       mem_size;			/// Address space size
+	uint32_t       nof_channels;		/// Number of channels
+	flink_dev*     parent;				/// The device this subdevice belongs to
 };
 
 #endif // FLINKLIB_TYPES_H_

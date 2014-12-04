@@ -32,7 +32,7 @@ PROJECT_NAME           = flinklib
 # This could be handy for archiving the generated documentation or 
 # if some version control system is used.
 
-PROJECT_NUMBER         = @EEROS_VERSION_MAJOR@.@EEROS_VERSION_MINOR@.@EEROS_VERSION_PATCH@.@EEROS_VERSION_TWEAK@
+PROJECT_NUMBER         = 
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description 
 # for a project that appears at the top of each page and should give viewer 
@@ -661,7 +661,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = @PROJECT_SOURCE_DIR@/include @PROJECT_SOURCE_DIR@/lib @PROJECT_SOURCE_DIR@/doc @PROJECT_SOURCE_DIR@/README.md
+INPUT                  = include lib doc test README.md
 
 # This tag can be used to specify the character encoding of the source files 
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is 
@@ -1321,7 +1321,7 @@ EXTRA_SEARCH_MAPPINGS  =
 # If the GENERATE_LATEX tag is set to YES (the default) Doxygen will 
 # generate Latex output.
 
-GENERATE_LATEX         = YES
+GENERATE_LATEX         = NO
 
 # The LATEX_OUTPUT tag is used to specify where the LaTeX docs will be put. 
 # If a relative path is entered the value of OUTPUT_DIRECTORY will be 
@@ -1817,7 +1817,7 @@ INCLUDED_BY_GRAPH      = YES
 # the time of a run. So in most cases it will be better to enable call graphs 
 # for selected functions only using the \callgraph command.
 
-CALL_GRAPH             = YES
+CALL_GRAPH             = NO
 
 # If the CALLER_GRAPH and HAVE_DOT tags are set to YES then 
 # doxygen will generate a caller dependency graph for every global function 
