@@ -12,6 +12,15 @@
  *                                                                 *
  *******************************************************************/
 
+/** @file flinklib.h
+ *  @brief flink userspace library, public header file.
+ *
+ *  This header file contains the high-level as well as the
+ *  low-level API
+ *
+ *  @author Martin Züger
+ */
+
 #ifndef FLINKLIB_H_
 #define FLINKLIB_H_
 
@@ -43,7 +52,7 @@ int     flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void*
 int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* wdata);
 
 
-// ############ Subdevice operations ############
+// ############ Header information ############
 
 #define REGISTER_WITH					4		// byte
 #define HEADER_SIZE						16		// byte
@@ -59,14 +68,16 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 #define NONEXCL_ACCESS					0
 #define EXCL_ACCESS						1
 
+// ############ Subdevice operations ############
+
 // General
 int           flink_get_nof_subdevices(flink_dev* dev);
 flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id);
 
 uint8_t       flink_subdevice_get_id(flink_subdev* subdev);
-uint16_t      flink_subdevice_get_type(flink_subdev* subdev);
-uint8_t       flink_subdevice_get_subtype(flink_subdev* subdev);
-uint8_t       flink_subdevice_get_ifversion(flink_subdev* subdev);
+uint16_t      flink_subdevice_get_function(flink_subdev* subdev);
+uint8_t       flink_subdevice_get_subfunction(flink_subdev* subdev);
+uint8_t       flink_subdevice_get_function_version(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_baseaddr(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_memsize(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_nofchannels(flink_subdev* subdev);

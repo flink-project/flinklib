@@ -8,15 +8,30 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  flink userspace library, subdevice type "pwm"                  *
+ *  flink userspace library, subdevice function "pwm"              *
  *                                                                 *
  *******************************************************************/
  
+/** @file pwm.c
+ *  @brief flink userspace library, subdevice function "pwm".
+ *
+ *  Contains the high-level functions for a flink subdevice
+ *  which realizes the function "pwm".
+ *
+ *  @author Martin Züger
+ */
+
 #include "flinklib.h"
 #include "types.h"
 #include "error.h"
 #include "log.h"
 
+/**
+ * @brief Reads the base clock of a PWM subdevice
+ * @param subdev: Subdevice.
+ * @param frequency: Contains the base clock in Hz.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_pwm_get_baseclock(flink_subdev* subdev, uint32_t* frequency) {
 	uint32_t offset;
 	
@@ -32,7 +47,13 @@ int flink_pwm_get_baseclock(flink_subdev* subdev, uint32_t* frequency) {
 	return EXIT_SUCCESS;
 }
 
-
+/**
+ * @brief Sets the PWM period
+ * @param subdev: Subdevice.
+ * @param channel: Channel number.
+ * @param period: Period of the PWM signal in multiples of the base clock.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period) {
 	uint32_t offset;
 	
@@ -48,7 +69,13 @@ int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period
 	return EXIT_SUCCESS;
 }
 
-
+/**
+ * @brief Sets the PWM hightime
+ * @param subdev: Subdevice.
+ * @param channel: Channel number.
+ * @param hightime: Hightime of the PWM signal in multiples of the base clock.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_pwm_set_hightime(flink_subdev* subdev, uint32_t channel, uint32_t hightime) {
 	uint32_t offset;
 		

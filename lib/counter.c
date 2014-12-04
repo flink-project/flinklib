@@ -8,10 +8,19 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  flink userspace library, subdevice type "conter"               *
+ *  flink userspace library, subdevice type "counter"              *
  *                                                                 *
  *******************************************************************/
  
+/** @file counter.c
+ *  @brief flink userspace library, subdevice function "counter".
+ *
+ *  Contains the high-level functions for a flink subdevice
+ *  which realizes the function "counter".
+ *
+ *  @author Martin Züger
+ */
+
 #include "flinklib.h"
 #include "types.h"
 #include "error.h"
