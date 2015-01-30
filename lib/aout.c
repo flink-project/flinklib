@@ -8,10 +8,19 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  flink userspace library, subdevice type "analog input"         *
+ *  flink userspace library, subdevice type "analog output         *
  *                                                                 *
  *******************************************************************/
  
+/** @file aout.c
+ *  @brief flink userspace library, subdevice function "analog output".
+ *
+ *  Contains the high-level functions for a flink subdevice
+ *  which realizes the function "analog output".
+ *
+ *  @author Marco Tinner
+ */
+
 #include "flinklib.h"
 #include "types.h"
 #include "error.h"
@@ -19,6 +28,12 @@
 
 #include <stdint.h>
 
+/**
+ * @brief Reads the resolution of a analog output subdevice
+ * @param subdev: Subdevice.
+ * @param resolution: Contains the resolution in number of resolvable steps.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution){
 	uint32_t offset;
 	offset = HEADER_SIZE + SUBHEADER_SIZE;
@@ -30,7 +45,13 @@ int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution){
 	return EXIT_SUCCESS;
 }
 
-
+/**
+ * @brief Writes an analog output channel
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Contains the digitized value of the channel output.
+ * @return int: 0 on success, -1 in case of failure.
+ */
 int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t value){
 	uint32_t offset;
 

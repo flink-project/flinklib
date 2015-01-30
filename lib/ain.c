@@ -54,6 +54,10 @@ int flink_analog_in_get_resolution(flink_subdev* subdev, uint32_t* resolution){
 int flink_analog_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value){
 	uint32_t offset;
 	
+	dbg_print("Get Value of analog in for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + ANALOG_INPUT_FIRST_VALUE_OFFSET + channel*REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+
 	if(flink_read(subdev, offset, REGISTER_WITH, value) != REGISTER_WITH) {
 		libc_error();
 		return EXIT_ERROR;
