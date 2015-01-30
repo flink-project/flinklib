@@ -65,9 +65,9 @@ int           flink_get_nof_subdevices(flink_dev* dev);
 flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id);
 
 uint8_t       flink_subdevice_get_id(flink_subdev* subdev);
-uint16_t      flink_subdevice_get_type(flink_subdev* subdev);
-uint8_t       flink_subdevice_get_subtype(flink_subdev* subdev);
-uint8_t       flink_subdevice_get_ifversion(flink_subdev* subdev);
+uint16_t      flink_subdevice_get_function(flink_subdev* subdev);
+uint8_t       flink_subdevice_get_subfunction(flink_subdev* subdev);
+uint8_t       flink_subdevice_get_function_version(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_baseaddr(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_memsize(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_nofchannels(flink_subdev* subdev);
