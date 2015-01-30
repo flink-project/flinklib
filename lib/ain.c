@@ -24,6 +24,7 @@
 #include "flinklib.h"
 #include "types.h"
 #include "error.h"
+#include "log.h"
 
 #include <stdint.h>
 
