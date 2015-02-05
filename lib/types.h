@@ -39,6 +39,7 @@ struct _flink_subdev {
 	uint32_t       base_addr;			/// Base address (logical)
 	uint32_t       mem_size;			/// Address space size
 	uint32_t       nof_channels;		/// Number of channels
+	uint32_t       unique_id;			/// Unique id, must be unique for a certain subdevice
 	flink_dev*     parent;				/// The device this subdevice belongs to
 };
 

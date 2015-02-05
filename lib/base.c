@@ -41,7 +41,7 @@
  *******************************************************************/
 
 /**
- * @brief Read number of subdevices from fink device.
+ * @brief Read number of subdevices from flink device.
  * 
  * @param dev: Device to read
  * @return int: Number of flink devices or -1 in case of error.
@@ -240,6 +240,30 @@ flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id) {
 }
 
 /**
+ * @brief Find subdevice of a device with a given unique id.
+ * @param dev: Device to search.
+ * @param unique_id: Unique id of subdevice.
+ * @return flink_subdev*: Pointer to the subdevice or NULL in case of error.
+ */
+flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t unique_id) {
+	flink_subdev* subdev = dev->subdevices;
+
+	// Check flink device structure
+	if(!validate_flink_dev(dev)) {
+		flink_error(FLINK_EINVALDEV);
+		return NULL;
+	}
+
+	while(subdev != NULL) {
+		if(subdev->unique_id == unique_id) {
+			return dev->subdevices;
+		}
+		subdev = subdev + 1;
+	}
+	return NULL;
+}
+
+/**
  * @brief Get the id of a subdevice.
  * @param subdev: The subdevice.
  * @return uint8_t: Id of the subdevice.
@@ -300,4 +324,13 @@ uint32_t flink_subdevice_get_memsize(flink_subdev* subdev) {
  */
 uint32_t flink_subdevice_get_nofchannels(flink_subdev* subdev) {
 	return subdev->nof_channels;
+}
+
+/**
+ * @brief Get the unique id of a subdevice.
+ * @param subdev: The subdevice.
+ * @return uint32_t: Returns the unique id.
+ */
+uint32_t flink_subdevice_get_unique_id(flink_subdev* subdev) {
+	return subdev->unique_id;
 }

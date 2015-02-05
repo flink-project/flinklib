@@ -73,6 +73,7 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 // General
 int           flink_get_nof_subdevices(flink_dev* dev);
 flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id);
+flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t subdev_id);
 
 uint8_t       flink_subdevice_get_id(flink_subdev* subdev);
 uint16_t      flink_subdevice_get_function(flink_subdev* subdev);
@@ -81,6 +82,7 @@ uint8_t       flink_subdevice_get_function_version(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_baseaddr(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_memsize(flink_subdev* subdev);
 uint32_t      flink_subdevice_get_nofchannels(flink_subdev* subdev);
+uint32_t      flink_subdevice_get_unique_id(flink_subdev* subdev);
 int           flink_subdevice_select(flink_subdev* subdev, uint8_t exclusive);
 int           flink_subdevice_reset(flink_subdev* subdev);
 const char*   flink_subdevice_id2str(uint16_t subdev_id);
