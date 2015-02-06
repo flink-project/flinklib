@@ -8,17 +8,17 @@
  *                                                                 *
  *******************************************************************
  *                                                                 *
- *  flink userspace library, subdevice function "analog input"     *
+ *  flink userspace library, subdevice type "analog output         *
  *                                                                 *
  *******************************************************************/
  
-/** @file ain.c
- *  @brief flink userspace library, subdevice function "analog input".
+/** @file aout.c
+ *  @brief flink userspace library, subdevice function "analog output".
  *
  *  Contains the high-level functions for a flink subdevice
- *  which realizes the function "analog input".
+ *  which realizes the function "analog output".
  *
- *  @author Martin Züger
+ *  @author Marco Tinner
  */
 
 #include "flinklib.h"
@@ -29,12 +29,12 @@
 #include <stdint.h>
 
 /**
- * @brief Reads the resolution of a analog input subdevice
+ * @brief Reads the resolution of a analog output subdevice
  * @param subdev: Subdevice.
  * @param resolution: Contains the resolution in number of resolvable steps.
  * @return int: 0 on success, -1 in case of failure.
  */
-int flink_analog_in_get_resolution(flink_subdev* subdev, uint32_t* resolution){
+int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution){
 	uint32_t offset;
 	offset = HEADER_SIZE + SUBHEADER_SIZE;
 	
@@ -46,20 +46,20 @@ int flink_analog_in_get_resolution(flink_subdev* subdev, uint32_t* resolution){
 }
 
 /**
- * @brief Reads an analog input channel
+ * @brief Writes an analog output channel
  * @param subdev: Subdevice containing the channel.
  * @param channel: Channel number.
- * @param value: Contains the digitized value of the channel input.
+ * @param value: Contains the digitized value of the channel output.
  * @return int: 0 on success, -1 in case of failure.
  */
-int flink_analog_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value){
+int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t value){
 	uint32_t offset;
-	
-	dbg_print("Get Value of analog in for channel %d on subdevice %d\n", subdev->id, channel);
-	offset = HEADER_SIZE + SUBHEADER_SIZE + ANALOG_INPUT_FIRST_VALUE_OFFSET + channel*REGISTER_WITH;
+
+	dbg_print("Get Value of analog out for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + ANALOG_OUTPUT_FIRST_VALUE_OFFSET + channel*REGISTER_WITH;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 
-	if(flink_read(subdev, offset, REGISTER_WITH, value) != REGISTER_WITH) {
+	if(flink_write(subdev, offset, REGISTER_WITH, &value) != REGISTER_WITH) {
 		libc_error();
 		return EXIT_ERROR;
 	}
