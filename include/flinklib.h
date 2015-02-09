@@ -45,20 +45,21 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 
 // ############ Subdevice operations ############
 
-#define REGISTER_WITH					4	// byte
-#define HEADER_SIZE					16	// byte
-#define SUBHEADER_SIZE					16	// byte
-#define STATUS_OFFSET					0x0010	// byte
-#define CONFIG_OFFSET					0x0014	// byte
-#define PWM_BASECLK_OFFSET				0x0000	// byte
-#define PWM_FIRSTPWM_OFFSET				0x0004	// byte
-#define ANALOG_INPUT_FIRST_VALUE_OFFSET			0x0004	// byte
-#define ANALOG_OUTPUT_FIRST_VALUE_OFFSET		0x0004	// byte
+#define REGISTER_WITH						4	// byte
+#define HEADER_SIZE							16	// byte
+#define SUBHEADER_SIZE						16	// byte
+#define STATUS_OFFSET						0x0010	// byte
+#define CONFIG_OFFSET						0x0014	// byte
+#define INFO_DESC_SIZE						28		// byte
+#define PWM_BASECLK_OFFSET					0x0000	// byte
+#define PWM_FIRSTPWM_OFFSET					0x0004	// byte
+#define ANALOG_INPUT_FIRST_VALUE_OFFSET		0x0004	// byte
+#define ANALOG_OUTPUT_FIRST_VALUE_OFFSET	0x0004	// byte
 #define WD_FIRST_COUNTER_OFFSET				0x0004	// byte
-#define RESET_BIT					0
+#define RESET_BIT							0
 
-#define NONEXCL_ACCESS					0
-#define EXCL_ACCESS					1
+#define NONEXCL_ACCESS						0
+#define EXCL_ACCESS							1
 
 // General
 int           flink_get_nof_subdevices(flink_dev* dev);
@@ -77,6 +78,9 @@ int           flink_subdevice_select(flink_subdev* subdev, uint8_t exclusive);
 int           flink_subdevice_reset(flink_subdev* subdev);
 const char*   flink_subdevice_id2str(uint8_t subdev_id);
 
+// Info
+int flink_info_get_description(flink_subdev* subdev, char* value);
+
 // Analog input
 int flink_analog_in_get_resolution(flink_subdev* subdev, uint32_t* resolution);
 int flink_analog_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
@@ -84,7 +88,6 @@ int flink_analog_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* 
 // Analog output
 int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution);
 int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t value);
-
 
 // Digital in-/output
 #define FLINK_OUTPUT 1

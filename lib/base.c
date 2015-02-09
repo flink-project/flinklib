@@ -229,7 +229,7 @@ flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id) {
 		flink_error(FLINK_EINVALDEV);
 		return NULL;
 	}
-	
+
 	// Check subdevice id
 	if(subdev_id > dev->nof_subdevices) {
 		flink_error(FLINK_EINVALSUBDEV);
