@@ -64,7 +64,7 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 // General
 int           flink_get_nof_subdevices(flink_dev* dev);
 flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id);
-flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t subdev_id);
+flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t unique_id);
 
 uint8_t       flink_subdevice_get_id(flink_subdev* subdev);
 uint16_t      flink_subdevice_get_function(flink_subdev* subdev);
