@@ -55,6 +55,7 @@ int main(int argc, char* argv[]) {
 			uint8_t  subfunc     = flink_subdevice_get_subfunction(subdev);
 			uint8_t  func_ver    = flink_subdevice_get_function_version(subdev);
 			uint32_t nofchannels = flink_subdevice_get_nofchannels(subdev);
+			uint32_t uniqueId    = flink_subdevice_get_unique_id(subdev);
 			
 			if(verbose) {
 				printf("  %3d:\n", id);
@@ -64,9 +65,10 @@ int main(int argc, char* argv[]) {
 				printf("       Sub function:       0x%02x (%d)\n", subfunc, subfunc);
 				printf("       Function version:   %d\n", func_ver);
 				printf("       Number of channels: %d\n", nofchannels);
+				printf("       Unique id:          0x%08x\n", uniqueId);
 			}
 			else {
-				printf("  %3d: 0x%08x - 0x%08x, Type %d.%d-%d, %d channels\n", id, baseaddr, lastaddr, func, subfunc, func_ver, nofchannels);
+				printf("  %3d: 0x%08x - 0x%08x, Type %d.%d-%d, %d channels, Id 0x%08x\n", id, baseaddr, lastaddr, func, subfunc, func_ver, nofchannels, uniqueId);
 			}
 		}
 	}

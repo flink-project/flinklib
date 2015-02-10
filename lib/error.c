@@ -28,7 +28,7 @@ __thread int flink_errno = 0;
 const char* flinklib_error_strings[] = {
 	"No error",
 	"Unknown error",
-	"Not supported"
+	"Not supported",
 	"Invalid device",
 	"Invalid subdevice",
 	"Invalid channel",

@@ -89,13 +89,13 @@ ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rd
 		flink_error(FLINK_EINVALSUBDEV);
 		return EXIT_ERROR;
 	}
-	
+
 	// seek offset
 	if(lseek(subdev->parent->fd, offset, SEEK_SET) != offset) {
 		libc_error();
 		return EXIT_ERROR;
 	}
-	
+
 	// read data from device
 	read_size = read(subdev->parent->fd, rdata, size);
 	if(read_size == -1) {
