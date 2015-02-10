@@ -22,7 +22,7 @@
 
 /**
  * @brief Checks if flink device was opened.
- * @param dev: Flink device.
+ * @param dev: flink device.
  * @return int: 1 if valid, 0 if not valid.
  */
 int validate_flink_dev(flink_dev* dev) {
@@ -33,12 +33,12 @@ int validate_flink_dev(flink_dev* dev) {
 }
 
 /**
- * @brief Checks if flink subdevice belongs to device and has one or more channels.
- * @param dev: Flink subdevice.
+ * @brief Checks if flink subdevice belongs to the device.
+ * @param dev: flink subdevice.
  * @return int: 1 if valid, 0 if not valid.
  */
 int validate_flink_subdev(flink_subdev* subdev) {
-	if(subdev->parent && subdev->nof_channels > 0) {
+	if(subdev->parent) {
 		return 1; // subdevice struct valid
 	}
 	return 0;

@@ -3,6 +3,15 @@ include_directories(../include)
 add_executable(lsflink lsflink.c)
 target_link_libraries(lsflink flink)
 
+add_executable(flinkinfo flinkinfo.c)
+target_link_libraries(flinkinfo flink)
+
+add_executable(flinkanaloginput flinkanaloginput.c)
+target_link_libraries(flinkanaloginput flink)
+
+add_executable(flinkanalogoutput flinkanalogoutput.c)
+target_link_libraries(flinkanalogoutput flink)
+
 add_executable(flinkdio flinkdio.c)
 target_link_libraries(flinkdio flink)
 

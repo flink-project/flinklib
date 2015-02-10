@@ -24,7 +24,7 @@
 // ############ Errorhandling ############
 
 #define FLINK_NOERROR		0x2000					// No error
-#define FLINK_EUNKNOWN		(FLINK_NOERROR  + 1)	// Unknown error
+#define FLINK_EUNKNOWN		(FLINK_NOERROR + 1)		// Unknown error
 #define FLINK_ENOTSUPPORTED	(FLINK_NOERROR + 2)		// Not supported
 #define FLINK_EINVALDEV		(FLINK_NOERROR + 3)		// Invalid device
 #define FLINK_EINVALSUBDEV	(FLINK_NOERROR + 4)		// Invalid subdevice
