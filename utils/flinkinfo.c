@@ -58,12 +58,7 @@ int main(int argc, char* argv[]) {
 		printf("Reading description failed!\n");
 		return -1;
 	} else {
-//		str[0] = 'w';
-//		str[1] = 'z';
-//		str[2] = 'r';
-//		printf("Description: %s\n", str);
-		for (e = 0; e < 29; e++) printf("%c", str[e]);
-		printf("\n");
+		printf("Description: %s\n", str);
 	}
 
 	// Close flink device

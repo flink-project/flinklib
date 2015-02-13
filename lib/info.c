@@ -46,7 +46,7 @@ int flink_info_get_description(flink_subdev* subdev, char* desc) {
 			libc_error();
 			return EXIT_ERROR;
 		}
-//		dbg_print("\t 0x%x\n", be32toh(val));
+		dbg_print("\t 0x%x\n", be16toh(*(uint32_t*)desc));	
 	}
 	return EXIT_SUCCESS;
 }
