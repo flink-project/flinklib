@@ -31,7 +31,9 @@ typedef enum {
 	READ_SINGLE_BIT			= 0x30,
 	WRITE_SINGLE_BIT		= 0x31,
 	SELECT_AND_READ_BIT		= 0x40,
-	SELECT_AND_WRITE_BIT	= 0x41
+	SELECT_AND_WRITE_BIT	= 0x41,
+	SELECT_AND_READ			= 0x42,
+	SELECT_AND_WRITE		= 0x43
 } ioctl_cmd_t;
 
 typedef struct _ioctl_bit_container_t {
@@ -40,5 +42,12 @@ typedef struct _ioctl_bit_container_t {
 	uint8_t  value;			/// Value of the bit
 	uint8_t  subdevice;		/// subdevice to read from / write to
 } ioctl_bit_container_t;
+
+typedef struct _ioctl_container_t {
+	uint8_t  subdevice;		/// subdevice to read from / write to
+	uint32_t offset;		/// offset to base address of subdevice
+	uint8_t  size;			/// size of data
+	void*    data;			/// data to read/write
+} ioctl_container_t;
 
 #endif // FLINKLIB_IOCTL_H_

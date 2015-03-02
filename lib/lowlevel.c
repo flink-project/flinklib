@@ -71,6 +71,11 @@ int flink_ioctl(flink_dev* dev, int cmd, void* arg) {
 ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rdata) {
 	int res = 0;
 	ssize_t read_size = 0;
+	ioctl_container_t ioctl_arg;
+	ioctl_arg.subdevice = subdev->id;
+	ioctl_arg.offset    = offset;
+	ioctl_arg.size      = size;
+	ioctl_arg.data      = rdata;
 	
 	// Check data pointer
 	if(rdata == NULL) {
@@ -83,21 +88,9 @@ ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rd
 		flink_error(FLINK_EINVALDEV);
 		return EXIT_ERROR;
 	}
-	
-	// Select subdevice
-	if(flink_subdevice_select(subdev, NONEXCL_ACCESS) < 0) {
-		flink_error(FLINK_EINVALSUBDEV);
-		return EXIT_ERROR;
-	}
-
-	// seek offset
-	if(lseek(subdev->parent->fd, offset, SEEK_SET) != offset) {
-		libc_error();
-		return EXIT_ERROR;
-	}
 
 	// read data from device
-	read_size = read(subdev->parent->fd, rdata, size);
+	read_size = flink_ioctl(subdev->parent, SELECT_AND_READ, &ioctl_arg);
 	if(read_size == -1) {
 		libc_error();
 		return EXIT_ERROR;
@@ -118,6 +111,11 @@ ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rd
 ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* wdata) {
 	int res = 0;
 	ssize_t write_size = 0;
+	ioctl_container_t ioctl_arg;
+	ioctl_arg.subdevice = subdev->id;
+	ioctl_arg.offset    = offset;
+	ioctl_arg.size      = size;
+	ioctl_arg.data      = wdata;
 	
 	// Check data pointer
 	if(wdata == NULL) {
@@ -131,20 +129,8 @@ ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* w
 		return EXIT_ERROR;
 	}
 	
-	// Select subdevice
-	if(flink_subdevice_select(subdev, NONEXCL_ACCESS) < 0) {
-		flink_error(FLINK_EINVALSUBDEV);
-		return EXIT_ERROR;
-	}
-	
-	// seek offset
-	if(lseek(subdev->parent->fd, offset, SEEK_SET) != offset) {
-		libc_error();
-		return EXIT_ERROR;
-	}
-	
 	// write data to device
-	write_size = write(subdev->parent->fd, wdata, size);
+	write_size = flink_ioctl(subdev->parent, SELECT_AND_WRITE, &ioctl_arg);
 	if(write_size == -1) {
 		libc_error();
 		return EXIT_ERROR;
