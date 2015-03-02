@@ -164,8 +164,9 @@ ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* w
  */
 int flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* rdata) {
 	ioctl_bit_container_t ioctl_arg;
-	ioctl_arg.offset = offset;
-	ioctl_arg.bit    = bit;
+	ioctl_arg.offset    = offset;
+	ioctl_arg.bit       = bit;
+	ioctl_arg.subdevice = subdev->id;
 	
 	// Check data pointer
 	if(rdata == NULL) {
@@ -179,14 +180,8 @@ int flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* rda
 		return EXIT_ERROR;
 	}
 	
-	// Select subdevice
-	if(flink_subdevice_select(subdev, NONEXCL_ACCESS) < 0) {
-		flink_error(FLINK_EINVALSUBDEV);
-		return EXIT_ERROR;
-	}
-	
-	// read data from device
-	if(flink_ioctl(subdev->parent, READ_SINGLE_BIT, &ioctl_arg) < 0) {
+	// select subdevice and read data
+	if(flink_ioctl(subdev->parent, SELECT_AND_READ_BIT, &ioctl_arg) < 0) {
 		libc_error();
 		return EXIT_ERROR;
 	}
@@ -207,9 +202,10 @@ int flink_read_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* rda
  */
 int flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* wdata) {
 	ioctl_bit_container_t ioctl_arg;
-	ioctl_arg.offset = offset;
-	ioctl_arg.bit    = bit;
-	ioctl_arg.value  = *((uint8_t*)wdata);
+	ioctl_arg.offset    = offset;
+	ioctl_arg.bit       = bit;
+	ioctl_arg.value     = *((uint8_t*)wdata);
+	ioctl_arg.subdevice = subdev->id;
 	
 	// Check data pointer
 	if(wdata == NULL) {
@@ -223,14 +219,8 @@ int flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void* wd
 		return EXIT_ERROR;
 	}
 	
-	// Select subdevice
-	if(flink_subdevice_select(subdev, NONEXCL_ACCESS) < 0) {
-		flink_error(FLINK_EINVALSUBDEV);
-		return EXIT_ERROR;
-	}
-	
-	// write data to device
-	if(flink_ioctl(subdev->parent, WRITE_SINGLE_BIT, &ioctl_arg) < 0) {
+	// select subdevice and write data
+	if(flink_ioctl(subdev->parent, SELECT_AND_WRITE_BIT, &ioctl_arg) < 0) {
 		libc_error();
 		return EXIT_ERROR;
 	}
