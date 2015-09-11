@@ -46,20 +46,22 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 // ############ Subdevice operations ############
 
 #define REGISTER_WITH						4	// byte
-#define HEADER_SIZE							16	// byte
+#define HEADER_SIZE						16	// byte
 #define SUBHEADER_SIZE						16	// byte
 #define STATUS_OFFSET						0x0010	// byte
 #define CONFIG_OFFSET						0x0014	// byte
 #define INFO_DESC_SIZE						28		// byte
 #define PWM_BASECLK_OFFSET					0x0000	// byte
 #define PWM_FIRSTPWM_OFFSET					0x0004	// byte
-#define ANALOG_INPUT_FIRST_VALUE_OFFSET		0x0004	// byte
-#define ANALOG_OUTPUT_FIRST_VALUE_OFFSET	0x0004	// byte
-#define WD_FIRST_COUNTER_OFFSET				0x0004	// byte
-#define RESET_BIT							0
+#define PPWA_BASECLK_OFFSET					0x0000	// byte
+#define PPWA_FIRSTPPWA_OFFSET					0x0004	// byte
+#define ANALOG_INPUT_FIRST_VALUE_OFFSET				0x0004	// byte
+#define ANALOG_OUTPUT_FIRST_VALUE_OFFSET			0x0004	// byte
+#define WD_FIRST_COUNTER_OFFSET					0x0004	// byte
+#define RESET_BIT						0
 
 #define NONEXCL_ACCESS						0
-#define EXCL_ACCESS							1
+#define EXCL_ACCESS						1
 
 // General
 int           flink_get_nof_subdevices(flink_dev* dev);
@@ -104,6 +106,11 @@ int flink_counter_get_count(flink_subdev* subdev, uint32_t channel, uint32_t* da
 int flink_pwm_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
 int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period);
 int flink_pwm_set_hightime(flink_subdev* subdev, uint32_t channel, uint32_t hightime);
+
+// PPWA
+int flink_ppwa_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
+int flink_ppwa_get_period(flink_subdev* subdev, uint32_t channel, uint32_t* period);
+int flink_ppwa_get_hightime(flink_subdev* subdev, uint32_t channel, uint32_t* hightime);
 
 // Watchdog
 int flink_wd_get_baseclock(flink_subdev* subdev, uint32_t* base_clk);

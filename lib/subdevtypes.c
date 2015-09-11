@@ -38,8 +38,9 @@ const char* flink_subdev_function_strings[] = {
 	"PWM",                          // 0x0C
 	"PPWA",                         // 0x0D
 	"unknown",                      // 0x0E
+	"unknown",                      // 0x0F
 	"Watch dog",                    // 0x10
-	"unknown",                      // 0x11
+	"Sensor",                      	// 0x11
 	"unknown",                      // 0x12
 	"unknown",                      // 0x13
 	"unknown",                      // 0x14

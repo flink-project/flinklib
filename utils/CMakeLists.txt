@@ -23,3 +23,6 @@ target_link_libraries(flinkcounter flink)
 
 add_executable(flinkwd flinkwd.c)
 target_link_libraries(flinkwd flink)
+
+add_executable(flinkppwa flinkppwa.c)
+target_link_libraries(flinkppwa flink)
