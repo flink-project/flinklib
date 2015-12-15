@@ -41,7 +41,8 @@ int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t outp
 	
 	dbg_print("Setting digital I/O direction for channel %d on subdevice %d\n", channel, subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + channel / (REGISTER_WITH * 8);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
+//	offset = HEADER_SIZE + SUBHEADER_SIZE + channel / (REGISTER_WITH * 8);
 	bit = channel % (REGISTER_WITH * 8);
 	
 	dbg_print("   --> calculated offset is 0x%x\n", offset);
@@ -68,8 +69,9 @@ int flink_dio_set_value(flink_subdev* subdev, uint32_t channel, uint8_t value) {
 	
 	dbg_print("Setting digital output value to %u...\n", val);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + subdev->nof_channels / (REGISTER_WITH * 8) + channel / (REGISTER_WITH * 8);
-	if(subdev->nof_channels % (REGISTER_WITH * 8) != 0) offset += 4;
+	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH;
+	offset += (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
 	bit = channel % (REGISTER_WITH * 8);
 	
 	dbg_print("   --> calculated offset is 0x%x\n", offset);
@@ -95,8 +97,9 @@ int flink_dio_get_value(flink_subdev* subdev, uint32_t channel, uint8_t* value) 
 	
 	dbg_print("Reading digital input value from channel %d on subdevice %d\n", channel, subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + subdev->nof_channels / (REGISTER_WITH * 8) + channel / (REGISTER_WITH * 8);
-	if(subdev->nof_channels % (REGISTER_WITH * 8) != 0) offset += 4;
+	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH;
+	offset += (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
 	bit = channel % (REGISTER_WITH * 8);
 	
 	dbg_print("[DEBUG]   --> calculated offset is 0x%x\n", offset);
