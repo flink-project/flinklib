@@ -42,7 +42,6 @@ int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t outp
 	dbg_print("Setting digital I/O direction for channel %d on subdevice %d\n", channel, subdev->id);
 	
 	offset = HEADER_SIZE + SUBHEADER_SIZE + (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
-//	offset = HEADER_SIZE + SUBHEADER_SIZE + channel / (REGISTER_WITH * 8);
 	bit = channel % (REGISTER_WITH * 8);
 	
 	dbg_print("   --> calculated offset is 0x%x\n", offset);
