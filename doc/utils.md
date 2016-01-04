@@ -74,3 +74,20 @@ Control a flink counter subdevice.
 | -n repeats    | number of repeats          |
 | -t time       | time between counter reads |
 
+
+flinkwatchdog
+------------
+
+Set a flink watchdog device.
+
+***Example:** `flinkwd -d /dev/flink0 -s 2 -n 20 -t 200`
+
+***Options:**
+
+| Option        | Description                |
+| ------------- | -------------------------- |
+| -d file       | specify device file        |
+| -s id         | select subdevice by id     |
+| -n repeats    | number of repeats          |
+| -t timeout    | watchdog timeout			 |
+
