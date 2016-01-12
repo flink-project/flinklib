@@ -15,6 +15,7 @@ if(DOXYGEN_FOUND)
 		COMMENT "Generating API documentation with Doxygen" VERBATIM )
 endif(DOXYGEN_FOUND)
 
+add_subdirectory(flinkinterface)
 add_subdirectory(lib)
 add_subdirectory(utils)
 add_subdirectory(test)

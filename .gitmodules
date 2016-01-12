@@ -1,0 +1,3 @@
+[submodule "flinkinterface"]
+	path = flinkinterface
+	url = https://github.com/flink-project/flinkinterface.git
