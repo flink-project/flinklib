@@ -7,6 +7,6 @@ set(FLINK_SRCS base.c lowlevel.c error.c valid.c subdevtypes.c info.c ain.c aout
 add_library(flink SHARED ${FLINK_SRCS})
 add_library(flink_static ${FLINK_SRCS})
 
-add_dependencies(flink subdevtypes)
-add_dependencies(flink_static subdevtypes)
+add_dependencies(flink subdevtypes flinkioctl_cmd)
+add_dependencies(flink_static subdevtypes flinkioctl_cmd)
 

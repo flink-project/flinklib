@@ -22,7 +22,7 @@
 #ifndef FLINKLIB_IOCTL_H_
 #define FLINKLIB_IOCTL_H_
 
-#include "flinkioctl_cmd.h"
+#include "flinkioctl_cmd.h"		// "flinkioctl_cmd.h" is created by: flinkiterface/ioctl/create_flinkioctl_cmd.h.sh
 
 typedef struct _ioctl_bit_container_t {
 	uint32_t offset;		/// Offset of byte containing the single bit, taken from subdevice base address
