@@ -256,7 +256,7 @@ flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t unique_id
 
 	while(subdev != NULL) {
 		if(subdev->unique_id == unique_id) {
-			return dev->subdevices;
+			return subdev;
 		}
 		subdev = subdev + 1;
 	}
