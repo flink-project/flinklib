@@ -26,3 +26,19 @@ target_link_libraries(flinkwd flink)
 
 add_executable(flinkppwa flinkppwa.c)
 target_link_libraries(flinkppwa flink)
+
+INSTALL(
+	TARGETS
+		lsflink
+		flinkinfo
+		flinkanaloginput
+		flinkanalogoutput
+		flinkdio
+		flinkpwm
+		flinkcounter
+		flinkwd
+		flinkppwa
+	RUNTIME
+	DESTINATION bin
+)
+
