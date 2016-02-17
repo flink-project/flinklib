@@ -26,6 +26,15 @@ int main(int argc, char* argv[]) {
 	uint32_t      sleep_time = 1000; // [ms]
 	int           error = 0;
 	
+	// Error message if long dashes (en dash) are used
+	int i;
+	for (i=0; i < argc; i++) {
+		 if ((argv[i][0] == 226) && (argv[i][1] == 128) && (argv[i][2] == 147)) {
+			fprintf(stderr, "Error: Invalid arguments. En dashes are used.\n");
+			return -1;
+		 }
+	}
+	
 	/* Compute command line arguments */
 	int c;
 	while((c = getopt(argc, argv, "d:s:c:n:t:r")) != -1) {

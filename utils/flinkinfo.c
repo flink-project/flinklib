@@ -16,6 +16,15 @@ int main(int argc, char* argv[]) {
 	uint8_t       subdevice_id = 0;
 	int           error = 0,e;
 	char          str[29];
+	
+	// Error message if long dashes (en dash) are used
+	int i;
+	for (i=0; i < argc; i++) {
+		 if ((argv[i][0] == 226) && (argv[i][1] == 128) && (argv[i][2] == 147)) {
+			fprintf(stderr, "Error: Invalid arguments. En dashes are used.\n");
+			return -1;
+		 }
+	}
 
 	/* Compute command line arguments */
 	int c;
