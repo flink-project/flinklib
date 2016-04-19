@@ -46,4 +46,4 @@ add_subdirectory(lib)
 add_subdirectory(utils)
 add_subdirectory(test)
 
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/flinklib.h ${CMAKE_CURRENT_SOURCE_DIR}/include/flinkioctl.h DESTINATION include)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/include/flinklib.h ${CMAKE_CURRENT_SOURCE_DIR}/include/flinkioctl.h ${CMAKE_CURRENT_SOURCE_DIR}/include/flink_funcid.h DESTINATION include)

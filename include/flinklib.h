@@ -18,6 +18,8 @@
 #include <stdint.h>
 #include <sys/types.h>
 
+#include "flink_funcid.h"		// "flink_funcid.h" is created by: flinkinterface/func_id/create_flink_funcid.sh
+
 #ifdef __cplusplus
 extern "C" {
 #endif

@@ -9,6 +9,6 @@ add_library(flink_static ${FLINK_SRCS})
 
 INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/libflink.so ${CMAKE_CURRENT_BINARY_DIR}/libflink_static.a DESTINATION lib)
 
-add_dependencies(flink subdevtypes flinkioctl_cmd)
-add_dependencies(flink_static subdevtypes flinkioctl_cmd)
+add_dependencies(flink subdevtypes flinkioctl_cmd flink_funcid)
+add_dependencies(flink_static subdevtypes flinkioctl_cmd flink_funcid)
 
