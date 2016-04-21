@@ -69,6 +69,31 @@ int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period
 	return EXIT_SUCCESS;
 }
 
+
+/**
+ * @brief Gets the PWM period
+ * @param subdev: Subdevice.
+ * @param channel: Channel number.
+ * @param *period: Period of the PWM signal in multiples of the base clock.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_pwm_get_period(flink_subdev* subdev, uint32_t channel, uint32_t* period) {
+	uint32_t offset;
+		
+	dbg_print("Reading period value from pwm %d of subdevice %d\n", channel, subdev->id);
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + PWM_FIRSTPWM_OFFSET + REGISTER_WITH * channel;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+	
+	if(flink_read(subdev, offset, REGISTER_WITH, period) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+
+
 /**
  * @brief Sets the PWM hightime
  * @param subdev: Subdevice.
@@ -90,3 +115,31 @@ int flink_pwm_set_hightime(flink_subdev* subdev, uint32_t channel, uint32_t high
 	}
 	return EXIT_SUCCESS;
 }
+
+/**
+ * @brief Gets the PWM hightime
+ * @param subdev: Subdevice.
+ * @param channel: Channel number.
+ * @param *hightime:  Hightime of the PWM signal in multiples of the base clock.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_pwm_get_hightime(flink_subdev* subdev, uint32_t channel, uint32_t* hightime) {
+	uint32_t offset;
+		
+	dbg_print("Reading hightime value from pwm %d of subdevice %d\n", channel, subdev->id);
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE + PWM_FIRSTPWM_OFFSET + subdev->nof_channels * REGISTER_WITH + REGISTER_WITH * channel;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+	
+	if(flink_read(subdev, offset, REGISTER_WITH, hightime) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+
+
+
+
+

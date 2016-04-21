@@ -34,7 +34,7 @@
 #define PWM_RATIO_THRESHOLD 0.2
 #define PWM_PERIOD_THRESHOLD 0.2
 #define NUMBER_OF_PWM_RATIO_PERIOD_TEST 100
-
+#define PWM_TIMEOUT 10000000
 
 
 
@@ -100,6 +100,7 @@ int main(int argc, char* argv[]) {
 		}
 	}
 	printf("FLink Base Device Testing\n");
+	
 	//get flink device
 	dev = flink_open(dev_name);
 	if(dev == NULL) {
@@ -112,6 +113,9 @@ int main(int argc, char* argv[]) {
 		printf("Wrong number of subdevices: %d\n",nof_subdevs);
 		return -1;
 	}
+
+
+
 	//test info device
 	printf("Testing info device.....\n");
 	if (testInfoDevice(dev,INFO_DEVICE_UNIQUE_ID, INFO_DEVICE_DESCRIPTOR,INFO_DEVICE_DESCRIPTOR_LENGTH) != 0 ){
@@ -539,10 +543,10 @@ int testPWMDevice(){
 	for (int i = 0 ; i < NUMBER_OF_PWM_RATIO_PERIOD_TEST; i++){
 		int r = rand();
 		float f = r*1.0/RAND_MAX;
-		uint32_t period = (int) (f*1000);
+		uint32_t period = 1 + (int) (f*999);
 		r = rand();
 		f = r*1.0/RAND_MAX;
-		float ratio = f*100;
+		float ratio = 2.0 + f*97.5;
 		r = rand();
 		f = r*1.0/RAND_MAX;	
 		int channel = (int) (f*NUMBER_OF_PWM_CHANNELS);
@@ -550,6 +554,32 @@ int testPWMDevice(){
 		//printf("Test pwm with period= %d, ratio= %f, channel= %d!\n",period,ratio,channel);
 		if(testRatio(ratio,period,channel) != 0)return -1;
 	}
+
+	//reset device and test if the ratio and period register resets
+	flink_subdevice_reset(pwm_device);
+	
+	for (int i = 0 ; i < NUMBER_OF_PWM_CHANNELS; i++){
+		uint32_t period;
+		uint32_t hightime;
+		if(flink_pwm_get_period(pwm_device, i, &period) != 0){
+			printf("error getting pwm period\n");
+			return -1;
+		}
+		if(flink_pwm_get_hightime(pwm_device, i, &hightime) != 0){
+			printf("error getting pwm hightime\n");
+			return -1;
+		};
+		if(period != 0){
+			printf("pwm wrong period value after reset!\n");
+			return -1;
+		}
+		if(hightime != 0){
+			printf("pwm wrong hightime value after reset!\n");
+			return -1;
+		}
+	}
+
+
 	return 0;
 }
 
@@ -579,7 +609,9 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 	bool running = true;
 	uint8_t numberOfEdges = 0;
 	int error = 0;
-	while(running){
+	int timeout = 0;
+	while(running && timeout < PWM_TIMEOUT){
+		timeout++;
 		flink_dio_get_value(in_gpio_device, channel, &value);
 			if(oldvalue != value){//edge detected
 				numberOfEdges++;
@@ -588,7 +620,7 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 					unsigned long long deltaT= (time.tv_usec + 1000000 *time.tv_sec) -(old.tv_usec + 1000000 *old.tv_sec);
 					float ratio = deltaT/period_us;
 					if(ratio < ratio_desired + PWM_RATIO_THRESHOLD && ratio > ratio_desired - PWM_RATIO_THRESHOLD){
-						printf("delta= %lu, ratio= %f\n",deltaT,ratio);
+						printf("delta= %lu, ratio= %f/%f\n",deltaT,ratio,ratio_desired);
 						error++;
 					}	
 				}
@@ -599,7 +631,7 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 					unsigned long long deltaT= (time.tv_usec + 1000000 *time.tv_sec) -(periodTime.tv_usec + 1000000 *periodTime.tv_sec);
 					float period = 1.0/period*1000000;
 					if(period < desired_period + PWM_PERIOD_THRESHOLD && period > desired_period - PWM_PERIOD_THRESHOLD){
-						printf("delta= %lu, ratio= %f\n",deltaT,period);
+						printf("delta= %lu, period= %f/%f\n",deltaT,period,desired_period);
 						error++;
 					}	
 				}
@@ -612,8 +644,13 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 			if(numberOfEdges <6){
 				running = true;
 			}
+		}
+		if(timeout >= PWM_TIMEOUT){
+			printf("pwm period timeout ratio= %f,period= %f\n",ratio_desired,desired_period);
+			return -1;
 		}	
 	}
+	
 	return error;
 }
 

@@ -107,7 +107,9 @@ int flink_counter_get_count(flink_subdev* subdev, uint32_t channel, uint32_t* da
 // PWM
 int flink_pwm_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
 int flink_pwm_set_period(flink_subdev* subdev, uint32_t channel, uint32_t period);
+int flink_pwm_get_period(flink_subdev* subdev, uint32_t channel, uint32_t* period);
 int flink_pwm_set_hightime(flink_subdev* subdev, uint32_t channel, uint32_t hightime);
+int flink_pwm_get_hightime(flink_subdev* subdev, uint32_t channel, uint32_t* hightime);
 
 // PPWA
 int flink_ppwa_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
