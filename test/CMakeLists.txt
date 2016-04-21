@@ -6,11 +6,5 @@ target_link_libraries(flink_test_open_close flink)
 add_executable(flink_test_read_write read_write.c)
 target_link_libraries(flink_test_read_write flink)
 
-add_executable(flink_test_gpio gpio_test.c)
-target_link_libraries(flink_test_gpio flink)
-
-add_executable(flink_test_fqd fqd_test.c)
-target_link_libraries(flink_test_fqd flink)
-
 add_executable(flink_test_base_devices base_device_test.c)
 target_link_libraries(flink_test_base_devices flink)
