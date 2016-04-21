@@ -57,7 +57,8 @@ The following testcases are implemented in the test program:
 - Reset the fqd device and test if the counter register resets to zero
 - Bitbang the out_io devices to simulate an encoder. Than read the counter register and check if it has the right value. 
 - Configure the two gpio devices to one only inputs and one only outputs. Than set the outputs and reade the inputs of the other device and check if the values match. The setting and reading is done in various orders.
-- Set the period and the hightime of the pwm device to a random value and use the in_io device to measure the times.  
+- Set the period and the hightime of the pwm device to a random value and use the in_io device to measure the times. 
+- reset the pwm device and test if the period and hightime register change to default values
 
 ## Run the Test
 The program can be run with the -d parameter to specify which flink device should be tested. For example: ./flink_test_base_devices  -d /dev/flink0 
