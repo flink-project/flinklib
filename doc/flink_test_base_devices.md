@@ -63,9 +63,4 @@ The following testcases are implemented in the test program:
 ## Run the Test
 The program can be run with the -d parameter to specify which flink device should be tested. For example: ./flink_test_base_devices  -d /dev/flink0 
 
-## TODO
-The following list shows the additional tests which should be implemented:
-- Add Watchdog Device to this test
-
-
 
