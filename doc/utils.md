@@ -72,7 +72,40 @@ Control a flink counter subdevice.
 | -s id         | select subdevice by id     |
 | -c channel    | channel to use             |
 | -n repeats    | number of repeats          |
-| -t time       | time between counter reads |
+| -t time       | time in ms between counter reads |
+
+
+flinkanaloginput
+------------
+
+Control a flink analog input subdevice.
+
+**Example:** `flinkcounter -d /dev/flink0 -s 4 -c 0`
+
+**Options:**
+
+| Option        | Description                |
+| ------------- | -------------------------- |
+| -d file       | specify device file        |
+| -s id         | select subdevice by id     |
+| -c channel    | channel to use             |
+
+
+flinkanalogoutput
+------------
+
+Control a flink analog output subdevice.
+
+**Example:** `flinkcounter -d /dev/flink0 -s 4 -c 0 -o 38000`
+
+**Options:**
+
+| Option        | Description                |
+| ------------- | -------------------------- |
+| -d file       | specify device file        |
+| -s id         | select subdevice by id     |
+| -c channel    | channel to use             |
+| -o value      | output value               |
 
 
 flinkwatchdog
