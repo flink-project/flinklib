@@ -80,7 +80,7 @@ flinkanaloginput
 
 Control a flink analog input subdevice.
 
-**Example:** `flinkcounter -d /dev/flink0 -s 4 -c 0`
+**Example:** `flinkanaloginput -d /dev/flink0 -s 4 -c 0`
 
 **Options:**
 
@@ -96,7 +96,7 @@ flinkanalogoutput
 
 Control a flink analog output subdevice.
 
-**Example:** `flinkcounter -d /dev/flink0 -s 4 -c 0 -o 38000`
+**Example:** `flinkanalogoutput -d /dev/flink0 -s 4 -c 0 -o 38000`
 
 **Options:**
 
