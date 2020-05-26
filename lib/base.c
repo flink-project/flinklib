@@ -91,10 +91,11 @@ static int get_subdevices(flink_dev* dev) {
 		subdev = dev->subdevices + i;
 		subdev->id = i;
 		ret = flink_ioctl(dev, READ_SUBDEVICE_INFO, subdev);
+		if (ret < 0) return ret;
 		subdev->parent = dev;
 	}
 	
-	return ret;
+	return i;
 }
 
 
@@ -245,7 +246,7 @@ flink_subdev* flink_get_subdevice_by_id(flink_dev* dev, uint8_t subdev_id) {
  * @param unique_id: Unique id of subdevice.
  * @return flink_subdev*: Pointer to the subdevice or NULL in case of error.
  */
-flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t unique_id) {
+flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint32_t unique_id) {
 	flink_subdev* subdev = dev->subdevices;
 
 	// Check flink device structure
@@ -254,7 +255,8 @@ flink_subdev* flink_get_subdevice_by_unique_id(flink_dev* dev, uint8_t unique_id
 		return NULL;
 	}
 
-	while(subdev != NULL) {
+	uint8_t nof = 0;
+	while(nof++ < dev->nof_subdevices) {
 		if(subdev->unique_id == unique_id) {
 			return subdev;
 		}
