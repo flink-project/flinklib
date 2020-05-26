@@ -144,9 +144,6 @@ flink_dev* flink_open(const char* file_name) {
  * @return int: 0 on success, -1 in case of failure.
  */
 int flink_close(flink_dev* dev) {
-	flink_subdev* subdev = NULL;
-	int i = 0;
-
 	if(!validate_flink_dev(dev)) {
 		flink_error(FLINK_EINVALDEV);
 		return EXIT_ERROR;

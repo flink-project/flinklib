@@ -16,8 +16,8 @@ int main(int argc, char* argv[]) {
 	uint8_t       subdevice_id = 0;
 	uint32_t      channel = 0;
 	int           error = 0;
-	bool          output;
-	bool          val;
+	bool          output = false;
+	bool          val = false;
 	
 	// Error message if long dashes (en dash) are used
 	int i;

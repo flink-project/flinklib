@@ -14,7 +14,7 @@ int main(int argc, char* argv[]) {
 	flink_subdev* subdev;
 	char*         dev_name = DEFAULT_DEV;
 	uint8_t       subdevice_id = 0;
-	int           error = 0,e;
+	int           error = 0;
 	char          str[29];
 	
 	// Error message if long dashes (en dash) are used

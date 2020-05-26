@@ -69,7 +69,6 @@ int flink_ioctl(flink_dev* dev, int cmd, void* arg) {
  * @return ssize_t: Nof bytes read from the subdevcie or a negative error code.
  */
 ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rdata) {
-	int res = 0;
 	ssize_t read_size = 0;
 	ioctl_container_t ioctl_arg;
 	ioctl_arg.subdevice = subdev->id;
@@ -109,7 +108,6 @@ ssize_t flink_read(flink_subdev* subdev, uint32_t offset, uint8_t size, void* rd
  * @return ssize_t: Nof bytes written or -1 in case of error.
  */
 ssize_t flink_write(flink_subdev* subdev, uint32_t offset, uint8_t size, void* wdata) {
-	int res = 0;
 	ssize_t write_size = 0;
 	ioctl_container_t ioctl_arg;
 	ioctl_arg.subdevice = subdev->id;

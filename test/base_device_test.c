@@ -69,8 +69,7 @@ flink_subdev* enc_b_gpio_device;
 
 int main(int argc, char* argv[]) {
 	char*      dev_name = DEFAULT_DEV;
-	bool       verbose = false;
-	int error = 0;
+
 	// Error message if long dashes (en dash) are used
 	int i;
 	for (i=0; i < argc; i++) {
@@ -88,7 +87,6 @@ int main(int argc, char* argv[]) {
 				dev_name = optarg;
 				break;
 			case 'v': // verbose mode
-				verbose = true;
 				break;
 			case '?':
 				if(optopt == 'd') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -610,6 +608,8 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 	uint8_t numberOfEdges = 0;
 	int error = 0;
 	int timeout = 0;
+	gettimeofday(&old,NULL);
+	flink_dio_get_value(in_gpio_device, channel, &oldvalue);
 	while(running && timeout < PWM_TIMEOUT){
 		timeout++;
 		flink_dio_get_value(in_gpio_device, channel, &value);
@@ -620,7 +620,7 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 					unsigned long long deltaT= (time.tv_usec + 1000000 *time.tv_sec) -(old.tv_usec + 1000000 *old.tv_sec);
 					float ratio = deltaT/period_us;
 					if(ratio < ratio_desired + PWM_RATIO_THRESHOLD && ratio > ratio_desired - PWM_RATIO_THRESHOLD){
-						printf("delta= %lu, ratio= %f/%f\n",deltaT,ratio,ratio_desired);
+						printf("delta= %llu, ratio= %f/%f\n",deltaT,ratio,ratio_desired);
 						error++;
 					}	
 				}
@@ -629,9 +629,9 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 				}
 				if(numberOfEdges == 3){
 					unsigned long long deltaT= (time.tv_usec + 1000000 *time.tv_sec) -(periodTime.tv_usec + 1000000 *periodTime.tv_sec);
-					float period = 1.0/period*1000000;
+					float period = 1.0/period_us*1000000;
 					if(period < desired_period + PWM_PERIOD_THRESHOLD && period > desired_period - PWM_PERIOD_THRESHOLD){
-						printf("delta= %lu, period= %f/%f\n",deltaT,period,desired_period);
+						printf("delta= %llu, period= %f/%d\n",deltaT,period,desired_period);
 						error++;
 					}	
 				}
@@ -646,7 +646,7 @@ int testRatio(float ratio_desired,uint32_t desired_period, int channel){
 			}
 		}
 		if(timeout >= PWM_TIMEOUT){
-			printf("pwm period timeout ratio= %f,period= %f\n",ratio_desired,desired_period);
+			printf("pwm period timeout ratio= %f,period= %d\n",ratio_desired,desired_period);
 			return -1;
 		}	
 	}

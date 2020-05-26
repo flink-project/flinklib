@@ -17,7 +17,7 @@ int main(int argc, char* argv[]) {
 	char c;
 	uint32_t offset;
 	uint32_t value;
-	uint8_t write;
+	uint8_t write = 0;
 	int error = 0;
 	
 	/* Compute command line arguments */
