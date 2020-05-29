@@ -18,6 +18,21 @@ Lists all subdevices of a flink device.
 | -v      | verbose mode        |
 
 
+flinkinfo
+-------
+
+Prints the description of the info subdevice.
+
+**Example:** `flinkinfo -d /dev/flink0 -s 0`
+
+**Options:**
+
+| Option  | Description            |
+| ------- | ---------------------- |
+| -d file | specify device file    |
+| -s id   | select subdevice by id |
+
+
 flinkdio
 --------
 
