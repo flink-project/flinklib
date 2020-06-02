@@ -36,17 +36,22 @@
  */
 int flink_info_get_description(flink_subdev* subdev, char* desc) {
 	uint32_t offset;
-	int i;
+	int i, k;
+	uint32_t data;
 	
 	dbg_print("Reading description from info subdevice with id %d\n", subdev->id);
 	
 	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
-	for(i = 0; i < INFO_DESC_SIZE; i += 4, offset += 4, desc += 4) {
-		if(flink_read(subdev, offset, 4, desc) != REGISTER_WITH) {
+	for(i = 0; i < INFO_DESC_SIZE; i += 4, offset += 4) {
+		if(flink_read(subdev, offset, 4, &data) != REGISTER_WITH) {
 			libc_error();
 			return EXIT_ERROR;
 		}
-		dbg_print("\t 0x%x\n", be16toh(*(uint32_t*)desc));	
+		for (k = REGISTER_WITH - 1; k >= 0; k--) {
+			*((uint8_t *)desc) = (uint8_t)(data >> (k * 8));
+			desc++;
+		}
+		dbg_print("\t 0x%x\n", data);	
 	}
 	return EXIT_SUCCESS;
 }
