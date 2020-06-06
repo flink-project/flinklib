@@ -21,7 +21,7 @@ Lists all subdevices of a flink device.
 flinkinfo
 -------
 
-Prints the description of the info subdevice.
+Prints the description string of the info subdevice.
 
 **Example:** `flinkinfo -d /dev/flink0 -s 0`
 
@@ -72,10 +72,29 @@ Control a flink PWM subdevice.
 | -v            | verbose output         |
 
 
+flinkppwa
+---------
+
+Read a flink PPWA subdevice.
+
+**Example:** `flinkppwa -d /dev/flink0 -s 3 -c 0`
+
+**Options:**
+
+| Option        | Description            |
+| ------------- | ---------------------- |
+| -d file       | specify device file    |
+| -s id         | select subdevice by id |
+| -c channel    | channel to use         |
+| -f frequency  | PWM frequency (in Hz)  |
+| -h dutycycle  | PWM duty cycle in %    |
+| -v            | verbose output         |
+
+
 flinkcounter
 ------------
 
-Control a flink counter subdevice.
+Read a flink counter subdevice.
 
 **Example:** `flinkcounter -d /dev/flink0 -s 1 -c 0 -n 100 -t 100`
 
@@ -93,7 +112,7 @@ Control a flink counter subdevice.
 flinkanaloginput
 ------------
 
-Control a flink analog input subdevice.
+Read a flink analog input subdevice.
 
 **Example:** `flinkanaloginput -d /dev/flink0 -s 4 -c 0`
 
@@ -126,11 +145,11 @@ Control a flink analog output subdevice.
 flinkwatchdog
 ------------
 
-Set a flink watchdog device.
+Control a flink watchdog device.
 
-***Example:** `flinkwd -d /dev/flink0 -s 2 -n 20 -t 200`
+**Example:** `flinkwd -d /dev/flink0 -s 2 -n 20 -t 200`
 
-***Options:**
+**Options:**
 
 | Option        | Description                |
 | ------------- | -------------------------- |
