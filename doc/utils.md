@@ -86,8 +86,6 @@ Read a flink PPWA subdevice.
 | -d file       | specify device file    |
 | -s id         | select subdevice by id |
 | -c channel    | channel to use         |
-| -f frequency  | PWM frequency (in Hz)  |
-| -h dutycycle  | PWM duty cycle in %    |
 | -v            | verbose output         |
 
 
@@ -123,6 +121,7 @@ Read a flink analog input subdevice.
 | -d file       | specify device file        |
 | -s id         | select subdevice by id     |
 | -c channel    | channel to use             |
+| -v            | verbose output             |
 
 
 flinkanalogoutput
@@ -140,12 +139,13 @@ Control a flink analog output subdevice.
 | -s id         | select subdevice by id     |
 | -c channel    | channel to use             |
 | -o value      | output value               |
+| -v            | verbose output             |
 
 
 flinkwatchdog
 ------------
 
-Control a flink watchdog device.
+Control a flink watchdog device. The watchdog is n times retriggered after 80% of the timeout is expired. 
 
 **Example:** `flinkwd -d /dev/flink0 -s 2 -n 20 -t 200`
 
@@ -156,5 +156,6 @@ Control a flink watchdog device.
 | -d file       | specify device file        |
 | -s id         | select subdevice by id     |
 | -n repeats    | number of repeats          |
-| -t timeout    | watchdog timeout			 |
-
+| -t timeout    | watchdog timeout			     |
+| -r            | real time                  |
+| -v            | verbose output             |
