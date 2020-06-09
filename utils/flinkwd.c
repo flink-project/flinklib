@@ -41,7 +41,7 @@ int main(int argc, char* argv[]) {
 	
 	/* Compute command line arguments */
 	int c;
-	while((c = getopt(argc, argv, "d:s:n:t:v:r")) != -1) {
+	while((c = getopt(argc, argv, "d:s:n:r:t:v")) != -1) {
 		switch(c) {
 			case 'd': // device file
 				dev_name = optarg;
@@ -59,11 +59,11 @@ int main(int argc, char* argv[]) {
 					return EPARAM;
 				}
 				break;
-			case 'v':
-				verbose = true;
-				break;
 			case 'r':
 				rt = true;
+				break;
+			case 'v':
+				verbose = true;
 				break;
 			case '?':
 				if(optopt == 'd' || optopt == 's' || optopt == 'c' || optopt == 'n' || optopt == 't') fprintf(stderr, "Option -%c requires an argument.\n", optopt);
@@ -90,20 +90,21 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// Read the subdevice base clock
-	error = flink_pwm_get_baseclock(subdev, &base_clk);
+	error = flink_wd_get_baseclock(subdev, &base_clk);
 	if(error != 0) {
-		printf("Reading subdevice base clock failed!\n");
+		fprintf(stderr, "Reading subdevice base clock failed!\n");
 		return EREAD;
 	}
-	if(verbose) {
-		printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
-	}
+	if(verbose) printf("Subdevice base clock: %u Hz (%f MHz)\n", base_clk, (float)base_clk / 1000000.0);
 	
 	// Calculate the counter value for the given timeout
-	counter = (uint32_t)(((long)base_clk * (long)time) / 1000);
-	if(verbose) {
-		printf("Calculated counter value: %u\n", counter);
+	uint64_t div = (uint64_t)base_clk * time / 1000;
+	if(div > (uint64_t)0xffffffff) {
+		fprintf(stderr, "Timeout value too high! (counter = 0x%x)\n", div);
+		return EPARAM;
 	}
+	counter = (uint32_t)div;
+	if(verbose) printf("Calculated counter value: %u\n", counter);
 	
 	if(rt) {
 		struct sched_param schedulingParam;
@@ -116,7 +117,11 @@ int main(int argc, char* argv[]) {
 	}
 	
 	// Read counter value
-	printf("WD active:\n");
+	printf("WD active\n");
+	uint8_t status;
+	flink_wd_get_status(subdev, &status);
+	if(verbose) printf("status = %d\n", status);
+	
 	while(repeat-- > 0) {
 		error = flink_wd_set_counter(subdev, counter);
 		if(error != 0) {
@@ -131,16 +136,19 @@ int main(int argc, char* argv[]) {
 			}
 			else {
 				if(verbose) printf("WD armed\n");
+				flink_wd_get_status(subdev, &status);
+				if(verbose) printf("status = %d\n", status);
 			}
 			first = false;
 		}
 		if(verbose) {
-			printf(".");
+			printf(".");	
 			fflush(stdout);
 		}
 		usleep(800 * time); // retrigger after 80% of the given time
 	}
 	if(verbose) printf("\n");
+	printf("WD done\n");
 	
 	// Close flink device
 	flink_close(dev);

@@ -62,7 +62,7 @@ int flink_wd_get_status(flink_subdev* subdev, uint8_t* status){
 	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 	
-	if(flink_read_bit(subdev, offset, 0, &status)) {
+	if(flink_read_bit(subdev, offset, 0, status)) {
 		libc_error();
 		return EXIT_ERROR;
 	}
@@ -101,7 +101,7 @@ int flink_wd_arm(flink_subdev* subdev){
 	uint32_t offset;
 	uint8_t arm = 1;
 
-	printf("[DEBUG] Arming WD (subdevice %d)\n", subdev->id);
+	dbg_print("[DEBUG] Arming WD (subdevice %d)\n", subdev->id);
 	
 	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
