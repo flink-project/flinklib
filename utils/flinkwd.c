@@ -19,6 +19,7 @@
 int main(int argc, char* argv[]) {
 	flink_dev*    dev;
 	flink_subdev* subdev;
+	uint16_t      function;
 	char*         dev_name = DEFAULT_DEV;
 	uint8_t       subdevice_id = 0;
 	int           time = 10; // [ms]
@@ -89,6 +90,13 @@ int main(int argc, char* argv[]) {
 		return ESUBDEVID;
 	}
 	
+	// Check the subdevice function
+	function = flink_subdevice_get_function(subdev);
+	if(function != WD_INTERFACE_ID) {
+		fprintf(stderr, "Subdevice with id %d has wrong function, check subdevice id!\n", subdevice_id);
+		return ESUBDEVID;
+	}
+
 	// Read the subdevice base clock
 	error = flink_wd_get_baseclock(subdev, &base_clk);
 	if(error != 0) {
