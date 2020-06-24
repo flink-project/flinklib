@@ -6,6 +6,10 @@ if(CMAKE_COMPILER_IS_GNUCC)
 	set(CMAKE_C_FLAGS "-std=gnu99")
 endif()
 
+## Set library version
+include(cmake/versionCheckHelpers.cmake)
+setLibraryVersion()
+
 ## Doxygen documentation target (make doc)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
