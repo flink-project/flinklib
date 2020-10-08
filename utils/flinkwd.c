@@ -108,7 +108,7 @@ int main(int argc, char* argv[]) {
 	// Calculate the counter value for the given timeout
 	uint64_t div = (uint64_t)base_clk * time / 1000;
 	if(div > (uint64_t)0xffffffff) {
-		fprintf(stderr, "Timeout value too high! (counter = 0x%x)\n", div);
+		fprintf(stderr, "Timeout value too high! (counter = 0x%lx)\n", div);
 		return EPARAM;
 	}
 	counter = (uint32_t)div;
