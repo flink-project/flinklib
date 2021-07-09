@@ -3,7 +3,7 @@ project(flinklib)
 
 ## Compiler flags
 if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-std=gnu99")
+	set(CMAKE_C_FLAGS "-std=gnu99 -O1")
 endif()
 
 ## Set library version
