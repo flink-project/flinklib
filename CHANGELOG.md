@@ -4,10 +4,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
-## Unreleased
-(v1.1.0 targeted for 2021-06-30) ([Github compare v1.0.1...master](https://github.com/flink-project/flinklib/compare/v1.0.1...master))
+## v1.0.2
+(2021-07-13) ([GitHub compare v1.0.1...v1.0.2](https://github.com/flink-project/flinklib/compare/v1.0.1...v1.0.2))
 
-### Added Features
+### Bugfixes
+ * Remove warnings
+ * Change build scripts to cmake modules library usage
 
 
 ## v1.0.1
