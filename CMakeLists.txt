@@ -1,48 +1,36 @@
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 3.10)
+
 project(flinklib)
 
-## Compiler flags
-if(CMAKE_COMPILER_IS_GNUCC)
-	set(CMAKE_C_FLAGS "-std=gnu99")
+set(CMAKE_CXX_STANDARD 14)
+
+
+## Load CMake modules library at specified version
+set(LOAD_CMAKE_MODULES_LIB TRUE CACHE BOOL "TRUE if the cmake-modules library should be loaded.")
+
+if(LOAD_CMAKE_MODULES_LIB)
+  include(cmake/CMakeModulesLibLoader.cmake)
+  load_cmake_modules_lib(https://github.com/eeros-project/cmake-modules.git)
 endif()
 
-## Set library version
-include(cmake/versionCheckHelpers.cmake)
+include(CMakeModulesLib)
+
+if(CMAKE_BUILD_TYPE MATCHES "Debug|DEBUG")
+  logger_on()
+endif()
+
+if(LOAD_CMAKE_MODULES_LIB)
+  checkout_cmake_modules_lib_version(8fcde84)
+endif()
+
+
+## Fetch the version information from git tag
+include(VersioningHelpers)
 setLibraryVersion()
 
-## Doxygen documentation target (make doc)
-find_package(Doxygen)
-if(DOXYGEN_FOUND)
-	configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen" VERBATIM )
-endif(DOXYGEN_FOUND)
 
-
-## Install CMake configuration file
-set(INCLUDE_INSTALL_DIR include/)
-set(LIB_INSTALL_DIR lib/)
-
-include(CMakePackageConfigHelpers)
-
-configure_package_config_file(
-	cmake/flinkConfig.cmake.in
-	${CMAKE_CURRENT_BINARY_DIR}/flinkConfig.cmake
-	INSTALL_DESTINATION ${LIB_INSTALL_DIR}/flink/cmake
-	PATH_VARS INCLUDE_INSTALL_DIR LIB_INSTALL_DIR)
-
-write_basic_package_version_file(
-	${CMAKE_CURRENT_BINARY_DIR}/flinkConfigVersion.cmake
-	VERSION 0
-	COMPATIBILITY SameMajorVersion)
-
-install(
-	FILES
-		${CMAKE_CURRENT_BINARY_DIR}/flinkConfig.cmake
-		${CMAKE_CURRENT_BINARY_DIR}/flinkConfigVersion.cmake
-	DESTINATION
-		${LIB_INSTALL_DIR}/flink/cmake)
+## Create the package files
+createPackageFiles(flinkConfig.cmake.in include/ lib/)
 
 
 add_subdirectory(flinkinterface)
@@ -56,3 +44,14 @@ INSTALL(FILES
 	${CMAKE_CURRENT_SOURCE_DIR}/include/flink_funcid.h 
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/types.h 
 	DESTINATION include)
+
+
+## Doxygen documentation target (make doc)
+find_package(Doxygen)
+if(DOXYGEN_FOUND)
+	configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+		COMMENT "Generating API documentation with Doxygen" VERBATIM )
+endif(DOXYGEN_FOUND)
+
