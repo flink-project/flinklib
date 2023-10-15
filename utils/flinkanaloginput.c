@@ -89,9 +89,7 @@ int main(int argc, char* argv[]) {
 		printf("Reading subdevice resolution failed!\n");
 		return EREAD;
 	}
-	if(verbose) {
-		printf("Subdevice resolution: %u \n", resolution);
-	}
+	printf("Subdevice resolution: %u \n", resolution);
 
 	// Read the subdevice value
 	error = flink_analog_in_get_value(subdev,channel,&value);
@@ -99,9 +97,7 @@ int main(int argc, char* argv[]) {
 		printf("Reading subdevice value failed!\n");
 		return EREAD;
 	}
-	if(verbose) {
-		printf("Subdevice channel %u has value: %u \n", channel, value);
-	}
+	printf("Subdevice channel %u has value: %u \n", channel, value);
 
 	// Close flink device
 	flink_close(dev);
