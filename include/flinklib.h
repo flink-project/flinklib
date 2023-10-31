@@ -58,6 +58,7 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 #define PPWA_BASECLK_OFFSET					0x0000	// byte
 #define PPWA_FIRSTPPWA_OFFSET					0x0004	// byte
 #define ANALOG_INPUT_FIRST_VALUE_OFFSET				0x0004	// byte
+#define REFLECTIV_SENSOR_FIRST_VALUE_OFFSET			0x0004	// byte
 #define ANALOG_OUTPUT_FIRST_VALUE_OFFSET			0x0004	// byte
 #define WD_FIRST_COUNTER_OFFSET					0x0004	// byte
 #define RESET_BIT						0
@@ -121,6 +122,10 @@ int flink_wd_get_baseclock(flink_subdev* subdev, uint32_t* base_clk);
 int flink_wd_get_status(flink_subdev* subdev, uint8_t* status);
 int flink_wd_set_counter(flink_subdev* subdev, uint32_t value);
 int flink_wd_arm(flink_subdev* subdev);
+
+// IR-Sensoren
+int flink_reflectivsensor_in_get_resolution(flink_subdev* subdev, uint32_t* resolution);
+int flink_reflectivsensor_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 
 
 // ############ Exit states ############
