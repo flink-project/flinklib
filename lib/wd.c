@@ -35,7 +35,7 @@
 int flink_wd_get_baseclock(flink_subdev* subdev, uint32_t* base_clk) {
 	uint32_t offset;
 	
-	printf("Reading base clock from watchdog subdevice %d\n", subdev->id);
+	dbg_print("Reading base clock from watchdog subdevice %d\n", subdev->id);
 	
 	offset = HEADER_SIZE + SUBHEADER_SIZE;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
