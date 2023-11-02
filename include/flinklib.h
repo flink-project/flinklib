@@ -124,8 +124,8 @@ int flink_wd_set_counter(flink_subdev* subdev, uint32_t value);
 int flink_wd_arm(flink_subdev* subdev);
 
 // IR-Sensoren
-int flink_reflectivsensor_in_get_resolution(flink_subdev* subdev, uint32_t* resolution);
-int flink_reflectivsensor_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+int flink_reflectivsensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
+int flink_reflectivsensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 
 
 // ############ Exit states ############

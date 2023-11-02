@@ -104,7 +104,7 @@ int main(int argc, char* argv[]) {
 	
 	// Check the subdevice function
 	function = flink_subdevice_get_function(subdev);
-	if(function != REFLECTIV_INTERFACE_ID) {
+	if(function != SENSOR_INTERFACE_ID) {
 		fprintf(stderr, "Subdevice with id %d has wrong function, check subdevice id!\n", subdevice_id);
 		return ESUBDEVID;
 	}
