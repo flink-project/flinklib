@@ -30,6 +30,12 @@ target_link_libraries(flinkppwa flink)
 add_executable(flinkreflectivsensoren flinkreflectivsensoren.c)
 target_link_libraries(flinkreflectivsensoren flink)
 
+add_executable(flinkinterrupthandler flinkinterrupthandler.c)
+target_link_libraries(flinkinterrupthandler flink)
+
+add_executable(flinkinterruptmultiplexer flinkinterruptmultiplexer.c)
+target_link_libraries(flinkinterruptmultiplexer flink)
+
 INSTALL(
 	TARGETS
 		lsflink
@@ -42,6 +48,8 @@ INSTALL(
 		flinkwd
 		flinkppwa
 		flinkreflectivsensoren
+		flinkinterrupthandler
+		flinkinterruptmultiplexer
 	RUNTIME
 	DESTINATION bin
 )

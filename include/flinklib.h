@@ -58,10 +58,13 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 #define PPWA_BASECLK_OFFSET					0x0000	// byte
 #define PPWA_FIRSTPPWA_OFFSET					0x0004	// byte
 #define ANALOG_INPUT_FIRST_VALUE_OFFSET				0x0004	// byte
-#define REFLECTIV_SENSOR_FIRST_VALUE_OFFSET			0x0004	// byte
+#define REFLECTIV_SENSOR_FIRST_VALUE_OFFSET				0x0004	// byte
 #define ANALOG_OUTPUT_FIRST_VALUE_OFFSET			0x0004	// byte
 #define WD_FIRST_COUNTER_OFFSET					0x0004	// byte
+#define STEPPER_MOTOR_FIRST_CONF_OFFSET    0x0004 // byte
 #define RESET_BIT						0
+#define GLOBAL_STEP_RESET               1
+
 
 #define NONEXCL_ACCESS						0
 #define EXCL_ACCESS						1
@@ -127,9 +130,14 @@ int flink_wd_arm(flink_subdev* subdev);
 int flink_reflectivsensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
 int flink_reflectivsensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 
+// Interrupt
+int flink_register_irq(flink_dev *dev, uint32_t irq_number);
+int flink_unregister_irq(flink_dev *dev, uint32_t irq_number);
+int flink_get_signal_offset(flink_dev *dev, uint32_t *offset);
+int flink_set_irq_multiplex(flink_subdev *subdev, uint32_t irq, uint32_t flink_irq);
+int flink_get_irq_multiplex(flink_subdev *subdev, uint32_t irq, uint32_t *flink_irq);
 
 // ############ Exit states ############
-
 #define EXIT_SUCCESS	0
 #define EXIT_ERROR		-1
 
