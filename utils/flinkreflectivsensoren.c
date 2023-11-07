@@ -52,6 +52,8 @@ int main(int argc, char* argv[]) {
 	int           error = 0;
 	uint32_t      resolution = 0;
 	uint32_t      value = 0;
+	uint32_t	  upperhys, lowerhys;
+	bool		  lower = false, upper= false;
 	
 	// Error message if long dashes (en dash) are used
 	int i;
@@ -64,7 +66,7 @@ int main(int argc, char* argv[]) {
 	
 	/* Compute command line arguments */
 	int c;
-	while((c = getopt(argc, argv, "d:s:c:v")) != -1) {
+	while((c = getopt(argc, argv, "d:s:c:u:l:v")) != -1) {
 		switch(c) {
 			case 'd': // device file
 				dev_name = optarg;
@@ -74,6 +76,14 @@ int main(int argc, char* argv[]) {
 				break;
 			case 'c': // channel
 				channel = atoi(optarg);
+				break;
+			case 'u': // upper hysterese
+				upperhys = atoi(optarg);
+				upper = true;
+				break;
+			case 'l': // lower hysterese
+				lowerhys = atoi(optarg);
+				lower = true;
 				break;
 			case 'v':
 				verbose = true;
@@ -107,6 +117,26 @@ int main(int argc, char* argv[]) {
 	if(function != SENSOR_INTERFACE_ID) {
 		fprintf(stderr, "Subdevice with id %d has wrong function, check subdevice id!\n", subdevice_id);
 		return ESUBDEVID;
+	}
+
+	// set and get hysteresis
+	error = 0;
+	if (upper) {
+		error += flink_reflectivsensor_set_upper_hysterese(subdev, channel, upperhys);
+	}
+	if (lower) {
+		error += flink_reflectivsensor_set_lower_hysterese(subdev, channel, lowerhys);
+	}
+	if(error<0) printf("Set Subdevices hysterese failed!\n");
+	error = 0;
+	if (verbose){
+		error += flink_reflectivsensor_get_upper_hysterese(subdev, channel, &upperhys);
+		error += flink_reflectivsensor_get_lower_hysterese(subdev, channel, &lowerhys);
+		if(error<0) {
+			printf("read Subdevices hysterese failed!\n");
+		} else {
+			printf("Subdevices hysterese: Upper Bound: %d, Lower Bound: %d\n", upperhys, lowerhys);
+		}
 	}
 
 	// Read the subdevice resolution

@@ -58,8 +58,96 @@ int flink_reflectivsensor_get_value(flink_subdev* subdev, uint32_t channel, uint
 	uint32_t offset;
 	
 
-	dbg_print("Get Value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
+	dbg_print("Get value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
 	offset = HEADER_SIZE + SUBHEADER_SIZE + REFLECTIV_SENSOR_FIRST_VALUE_OFFSET + channel*REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+
+	if(flink_read(subdev, offset, REGISTER_WITH, value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief This sets the upper limit of the hysteresis for a reflective sensor.
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Countains the value for the upper bound.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_reflectivsensor_set_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value){
+	uint32_t offset;
+
+	dbg_print("Set value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REFLECTIV_SENSOR_FIRST_VALUE_OFFSET + REGISTER_WITH*subdev->nof_channels;
+	offset += channel*REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+
+	if(flink_write(subdev, offset, REGISTER_WITH, &value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief This gets the upper limit of the hysteresis for a reflective sensor.
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Countains the value for the upper bound.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_reflectivsensor_get_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value){
+	uint32_t offset;
+
+	dbg_print("Get value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REFLECTIV_SENSOR_FIRST_VALUE_OFFSET + REGISTER_WITH*subdev->nof_channels;
+	offset += channel*REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+
+	if(flink_read(subdev, offset, REGISTER_WITH, value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief This sets the under limit of the hysteresis for a reflective sensor.
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Countains the value for the upper bound.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_reflectivsensor_set_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value){
+	uint32_t offset;
+
+	dbg_print("Set value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REFLECTIV_SENSOR_FIRST_VALUE_OFFSET + 2*REGISTER_WITH*subdev->nof_channels;
+	offset += channel*REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+
+	if(flink_write(subdev, offset, REGISTER_WITH, &value) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief This gets the under limit of the hysteresis for a reflective sensor.
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Countains the value for the upper bound.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_reflectivsensor_get_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value){
+	uint32_t offset;
+
+	dbg_print("Get value of refelctiv sensor for channel %d on subdevice %d\n", subdev->id, channel);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REFLECTIV_SENSOR_FIRST_VALUE_OFFSET + 2*REGISTER_WITH*subdev->nof_channels;
+	offset += channel*REGISTER_WITH;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 
 	if(flink_read(subdev, offset, REGISTER_WITH, value) != REGISTER_WITH) {
