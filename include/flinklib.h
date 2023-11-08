@@ -18,7 +18,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 
-#include "../flinkinterface/flink_funcid.h"		// "flink_funcid.h" is created by: flinkinterface/func_id/create_flink_funcid.sh
+#include "flink_funcid.h"		// "flink_funcid.h" is created by: flinkinterface/func_id/create_flink_funcid.sh
 
 #ifdef __cplusplus
 extern "C" {
@@ -126,9 +126,13 @@ int flink_wd_get_status(flink_subdev* subdev, uint8_t* status);
 int flink_wd_set_counter(flink_subdev* subdev, uint32_t value);
 int flink_wd_arm(flink_subdev* subdev);
 
-// IR-Sensoren
-int flink_reflectivsensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
-int flink_reflectivsensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+// Reflectiv Sensoren
+int flink_reflectivesensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
+int flink_reflectivesensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+int flink_reflectivesensor_set_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value);
+int flink_reflectivesensor_get_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+int flink_reflectivesensor_set_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value);
+int flink_reflectivesensor_get_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 
 // Interrupt
 int flink_register_irq(flink_dev *dev, uint32_t irq_number);

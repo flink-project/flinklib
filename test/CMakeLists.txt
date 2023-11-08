@@ -1,4 +1,4 @@
-include_directories(../include)
+include_directories(../include ${CMAKE_BINARY_DIR}/flinkinterface/)
 
 add_executable(flink_test_open_close open_close.c)
 target_link_libraries(flink_test_open_close flink)

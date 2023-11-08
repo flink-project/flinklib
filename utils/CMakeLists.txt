@@ -1,4 +1,4 @@
-include_directories(../include)
+include_directories(../include ${CMAKE_BINARY_DIR}/flinkinterface/)
 
 add_executable(lsflink lsflink.c)
 target_link_libraries(lsflink flink)
@@ -27,8 +27,8 @@ target_link_libraries(flinkwd flink)
 add_executable(flinkppwa flinkppwa.c)
 target_link_libraries(flinkppwa flink)
 
-add_executable(flinkreflectivsensoren flinkreflectivsensoren.c)
-target_link_libraries(flinkreflectivsensoren flink)
+add_executable(flinkreflectivesensoren flinkreflectivesensoren.c)
+target_link_libraries(flinkreflectivesensoren flink)
 
 add_executable(flinkinterrupthandler flinkinterrupthandler.c)
 target_link_libraries(flinkinterrupthandler flink)
@@ -47,7 +47,7 @@ INSTALL(
 		flinkcounter
 		flinkwd
 		flinkppwa
-		flinkreflectivsensoren
+		flinkreflectivesensoren
 		flinkinterrupthandler
 		flinkinterruptmultiplexer
 	RUNTIME
