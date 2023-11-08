@@ -8,14 +8,14 @@
  *                                                                                         *
  *******************************************************************************************
  *                                                                                         *
- *           flink terminal command, subdevice function "Reflectiv-Sensoren"                  *
+ *         flink terminal command, subdevice function "Reflective-Sensoren"                *
  *                                                                                         *
  *******************************************************************************************/
  
-/** @file flinkreflectivsensoren.c
- *  @brief flink terminal command, subdevice function "Reflectiv-Sensoren" .
+/** @file flinkreflectivesensoren.c
+ *  @brief flink terminal command, subdevice function "Reflective-Sensoren" .
  *
- *  Provides the terminal function "reflectiv-Sensoren". To test 
+ *  Provides the terminal function "reflective-Sensoren". To test 
  *  in a short and easy way the subdevice.
  * 
  *  is based of flinkanaloginput.c
@@ -122,16 +122,16 @@ int main(int argc, char* argv[]) {
 	// set and get hysteresis
 	error = 0;
 	if (upper) {
-		error += flink_reflectivsensor_set_upper_hysterese(subdev, channel, upperhys);
+		error += flink_reflectivesensor_set_upper_hysterese(subdev, channel, upperhys);
 	}
 	if (lower) {
-		error += flink_reflectivsensor_set_lower_hysterese(subdev, channel, lowerhys);
+		error += flink_reflectivesensor_set_lower_hysterese(subdev, channel, lowerhys);
 	}
 	if(error<0) printf("Set Subdevices hysterese failed!\n");
 	error = 0;
 	if (verbose){
-		error += flink_reflectivsensor_get_upper_hysterese(subdev, channel, &upperhys);
-		error += flink_reflectivsensor_get_lower_hysterese(subdev, channel, &lowerhys);
+		error += flink_reflectivesensor_get_upper_hysterese(subdev, channel, &upperhys);
+		error += flink_reflectivesensor_get_lower_hysterese(subdev, channel, &lowerhys);
 		if(error<0) {
 			printf("read Subdevices hysterese failed!\n");
 		} else {
@@ -140,7 +140,7 @@ int main(int argc, char* argv[]) {
 	}
 
 	// Read the subdevice resolution
-	error = flink_reflectivsensor_get_resolution(subdev,&resolution);
+	error = flink_reflectivesensor_get_resolution(subdev,&resolution);
 	if(error != 0) {
 		printf("Reading subdevice resolution failed!\n");
 		return EREAD;
@@ -148,7 +148,7 @@ int main(int argc, char* argv[]) {
 	printf("Subdevice resolution: %u \n", resolution);
 
 	// Read the subdevice value
-	error = flink_reflectivsensor_get_value(subdev,channel,&value);
+	error = flink_reflectivesensor_get_value(subdev,channel,&value);
 	if(error != 0) {
 		printf("Reading subdevice value failed!\n");
 		return EREAD;
