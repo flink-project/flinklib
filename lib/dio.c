@@ -29,6 +29,27 @@
 #include <stdint.h>
 
 /**
+ * @brief Reads the base clock of a dio subdevice
+ * @param subdev: Subdevice.
+ * @param frequency: Contains the base clock in Hz.
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_dio_get_baseclock(flink_subdev* subdev, uint32_t* frequency) {
+	uint32_t offset;
+
+	dbg_print("Reading base clock from dio subdevice %d\n", subdev->id);
+	
+	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+	
+	if(flink_read(subdev, offset, REGISTER_WITH, frequency) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
  * @brief Configures a channel as input or output
  * @param subdev: Subdevice containing the channel.
  * @param channel: Channel number.
@@ -41,7 +62,7 @@ int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t outp
 	
 	dbg_print("Setting digital I/O direction for channel %d on subdevice %d\n", channel, subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
+	offset = HEADER_SIZE + SUBHEADER_SIZE + 4 + (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
 	bit = channel % (REGISTER_WITH * 8);
 	
 	dbg_print("   --> calculated offset is 0x%x\n", offset);
@@ -68,7 +89,7 @@ int flink_dio_set_value(flink_subdev* subdev, uint32_t channel, uint8_t value) {
 	
 	dbg_print("Setting digital output value to %u...\n", val);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	offset = HEADER_SIZE + SUBHEADER_SIZE + 4;
 	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH;
 	offset += (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
 	bit = channel % (REGISTER_WITH * 8);
@@ -96,7 +117,7 @@ int flink_dio_get_value(flink_subdev* subdev, uint32_t channel, uint8_t* value) 
 	
 	dbg_print("Reading digital input value from channel %d on subdevice %d\n", channel, subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE;
+	offset = HEADER_SIZE + SUBHEADER_SIZE + 4;
 	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH;
 	offset += (channel / (REGISTER_WITH * 8)) * REGISTER_WITH;
 	bit = channel % (REGISTER_WITH * 8);
@@ -105,6 +126,52 @@ int flink_dio_get_value(flink_subdev* subdev, uint32_t channel, uint8_t* value) 
 	dbg_print("[DEBUG]   --> calculated bit is %u\n", bit);
 	
 	if(flink_read_bit(subdev, offset, bit, value)) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief Write the debounce value for a channel
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Contains the debounce value. The value is in multiple of the base clock
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_dio_set_debounce(flink_subdev* subdev, uint32_t channel, uint32_t debounce) {
+	uint32_t offset;
+
+	dbg_print("Write digital input debounce time from channel %d on subdevice %d\n", channel, subdev->id);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + 4;
+	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH * 2;
+	offset += channel * REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+	
+	if(flink_write(subdev, offset, REGISTER_WITH, &debounce) != REGISTER_WITH) {
+		libc_error();
+		return EXIT_ERROR;
+	}
+	return EXIT_SUCCESS;
+}
+
+/**
+ * @brief Reads the debounce value for a channel
+ * @param subdev: Subdevice containing the channel.
+ * @param channel: Channel number.
+ * @param value: Contains the debounce value. The value is in multiple of the base clock
+ * @return int: 0 on success, -1 in case of failure.
+ */
+int flink_dio_get_debounce(flink_subdev* subdev, uint32_t channel, uint32_t* debounce) {
+	uint32_t offset;
+
+	dbg_print("Read digital input debounce time from channel %d on subdevice %d\n", channel, subdev->id);
+	offset = HEADER_SIZE + SUBHEADER_SIZE + 4;
+	offset += ((subdev->nof_channels - 1) / (REGISTER_WITH * 8) + 1) * REGISTER_WITH * 2;
+	offset += channel * REGISTER_WITH;
+	dbg_print("  --> calculated offset is 0x%x!\n", offset);
+	
+	if(flink_read(subdev, offset, REGISTER_WITH, debounce) != REGISTER_WITH) {
 		libc_error();
 		return EXIT_ERROR;
 	}
