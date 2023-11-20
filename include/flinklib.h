@@ -58,7 +58,7 @@ int     flink_write_bit(flink_subdev* subdev, uint32_t offset, uint8_t bit, void
 #define PPWA_BASECLK_OFFSET					0x0000	// byte
 #define PPWA_FIRSTPPWA_OFFSET					0x0004	// byte
 #define ANALOG_INPUT_FIRST_VALUE_OFFSET				0x0004	// byte
-#define REFLECTIV_SENSOR_FIRST_VALUE_OFFSET				0x0004	// byte
+#define REFLECTIVE_SENSOR_FIRST_VALUE_OFFSET				0x0004	// byte
 #define ANALOG_OUTPUT_FIRST_VALUE_OFFSET			0x0004	// byte
 #define WD_FIRST_COUNTER_OFFSET					0x0004	// byte
 #define STEPPER_MOTOR_FIRST_CONF_OFFSET    0x0004 // byte
@@ -100,9 +100,12 @@ int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t 
 // Digital in-/output
 #define FLINK_OUTPUT 1
 #define FLINK_INPUT 0
+int flink_dio_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
 int flink_dio_set_direction(flink_subdev* subdev, uint32_t channel, uint8_t output);
 int flink_dio_set_value(flink_subdev* subdev, uint32_t channel, uint8_t high);
 int flink_dio_get_value(flink_subdev* subdev, uint32_t channel, uint8_t* value);
+int flink_dio_set_debounce(flink_subdev* subdev, uint32_t channel, uint32_t debounce);
+int flink_dio_get_debounce(flink_subdev* subdev, uint32_t channel, uint32_t* debounce);
 
 // Counter
 int flink_counter_set_mode(flink_subdev* subdev, uint8_t mode);
@@ -126,7 +129,24 @@ int flink_wd_get_status(flink_subdev* subdev, uint8_t* status);
 int flink_wd_set_counter(flink_subdev* subdev, uint32_t value);
 int flink_wd_arm(flink_subdev* subdev);
 
-// Reflectiv Sensoren
+// Stepper Motor
+int flink_stepperMotor_get_baseclock(flink_subdev* subdev, uint32_t* frequency);
+int flink_stepperMotor_set_local_config_reg(flink_subdev* subdev, uint32_t channel, uint32_t config);
+int flink_stepperMotor_get_local_config_reg(flink_subdev* subdev, uint32_t channel, uint32_t* config);
+int flink_stepperMotor_set_local_config_reg_bits_atomic(flink_subdev* subdev, uint32_t channel, uint32_t config_set);
+int flink_stepperMotor_reset_local_config_reg_bits_atomic(flink_subdev* subdev, uint32_t channel, uint32_t config_reset);
+int flink_stepperMotor_set_prescaler_start(flink_subdev* subdev, uint32_t channel, uint32_t prescaler);
+int flink_stepperMotor_get_prescaler_start(flink_subdev* subdev, uint32_t channel, uint32_t* prescaler);
+int flink_stepperMotor_set_prescaler_top(flink_subdev* subdev, uint32_t channel, uint32_t prescaler);
+int flink_stepperMotor_get_prescaler_top(flink_subdev* subdev, uint32_t channel, uint32_t* prescaler);
+int flink_stepperMotor_set_acceleration(flink_subdev* subdev, uint32_t channel, uint32_t acceleration);
+int flink_stepperMotor_get_acceleration(flink_subdev* subdev, uint32_t channel, uint32_t* acceleration);
+int flink_stepperMotor_set_steps_to_do(flink_subdev* subdev, uint32_t channel, uint32_t steps);
+int flink_stepperMotor_get_steps_to_do(flink_subdev* subdev, uint32_t channel, uint32_t* steps);
+int flink_stepperMotor_get_steps_have_done(flink_subdev* subdev, uint32_t channel, uint32_t* steps);
+int flink_steppermotor_global_step_reset(flink_subdev* subdev);
+
+// Reflective sensor
 int flink_reflectivesensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
 int flink_reflectivesensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 int flink_reflectivesensor_set_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value);

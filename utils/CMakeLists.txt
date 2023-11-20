@@ -27,6 +27,9 @@ target_link_libraries(flinkwd flink)
 add_executable(flinkppwa flinkppwa.c)
 target_link_libraries(flinkppwa flink)
 
+add_executable(flinksteppermotor flinksteppermotor.c)
+target_link_libraries(flinksteppermotor flink m)
+
 add_executable(flinkreflectivesensoren flinkreflectivesensoren.c)
 target_link_libraries(flinkreflectivesensoren flink)
 
@@ -48,6 +51,7 @@ INSTALL(
 		flinkwd
 		flinkppwa
 		flinkreflectivesensoren
+		flinksteppermotor
 		flinkinterrupthandler
 		flinkinterruptmultiplexer
 	RUNTIME

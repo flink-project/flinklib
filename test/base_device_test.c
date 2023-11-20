@@ -9,7 +9,7 @@
 #include <time.h>
 
 #include <flinklib.h>
-#include <../flinkinterface/flink_funcid.h>
+#include <flink_funcid.h>
 
 
 #define DEFAULT_DEV "/dev/flink0"
