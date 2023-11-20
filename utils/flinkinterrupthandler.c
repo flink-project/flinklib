@@ -29,7 +29,6 @@ void sigintHandler(int signum) {
     error = flink_unregister_irq(dev, irq_nr);
 	if(error != 0) {
 		printf("Could not unregister IRQ. error: %u!\n", error);
-		return EREAD;
 	}
 
 	// Close flink device
