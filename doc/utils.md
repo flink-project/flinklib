@@ -191,12 +191,12 @@ File(/dev/flink0), Cannel(0), CW, Full Steps, Two Phase, Freerunning(30sec), Sta
 | -v              | verbose output                            |
 
 
-flinkrefelxsensoren
+flinkreflectivesensoren
 ------------
 
 Read a flink reflex light sensor subdevice.
 
-**Example:** `flinkrefelxsensoren -d /dev/flink0 -s 4 -c 0`
+**Example:** `flinkreflectivesensoren -d /dev/flink0 -s 4 -c 0`
 
 **Options:**
 
