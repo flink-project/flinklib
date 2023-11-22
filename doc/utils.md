@@ -194,7 +194,7 @@ File(/dev/flink0), Cannel(0), CW, Full Steps, Two Phase, Freerunning(30sec), Sta
 flinkreflectivesensoren
 ------------
 
-Read a flink reflex light sensor subdevice.
+Read a flink reflective light sensor subdevice.
 
 **Example:** `flinkreflectivesensoren -d /dev/flink0 -s 4 -c 0`
 
