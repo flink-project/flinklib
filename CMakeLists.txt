@@ -41,7 +41,8 @@ add_subdirectory(test)
 INSTALL(FILES 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/flinklib.h 
 	${CMAKE_CURRENT_SOURCE_DIR}/include/flinkioctl.h 
-	${CMAKE_CURRENT_SOURCE_DIR}/include/flink_funcid.h 
+	${CMAKE_CURRENT_BINARY_DIR}/flinkinterface/flink_funcid.h
+	${CMAKE_CURRENT_BINARY_DIR}/flinkinterface/flinkioctl_cmd.h
 	${CMAKE_CURRENT_SOURCE_DIR}/lib/types.h 
 	DESTINATION include)
 
