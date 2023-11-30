@@ -16,7 +16,10 @@
  *  @brief flink userspace library, subdevice function "digital I/O".
  *
  *  Contains the high-level functions for a flink subdevice
- *  which realizes the function "digital I/O".
+ *  which realizes the function "digital I/O". This subdevice can generate 
+ *  interrupts upon a level change. A debounce time can be set in order
+ *  to generate interrupts only if such a level change lasts for a 
+ *  this debounce time.
  *
  *  @author Martin Züger
  */

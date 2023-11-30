@@ -1,16 +1,16 @@
-/*******************************************************************************************
- *    ____   _____ _______            _________  _____     _____  ____  _____  ___  ____   *
- *   / __ \ / ____|__   __|          |_   ___  ||_   _|   |_   _||_   \|_   _||_  ||_  _|  *
- *  | |  | | (___    | |    _______    | |_  \_|  | |       | |    |   \ | |    | |_/ /    *
- *  | |  | |\___ \   | |   |_______|   |  _|      | |   _   | |    | |\ \| |    |  __'.    *
- *  | |__| |____) |  | |              _| |_      _| |__/ | _| |_  _| |_\   |_  _| |  \ \_  *
- *   \____/|_____/   |_|             |_____|    |________||_____||_____|\____||____||____| *
- *                                                                                         *
- *******************************************************************************************
- *                                                                                         *
- *             flink userspace library, subdevice function "stepperMotor"                  *
- *                                                                                         *
- *******************************************************************************************/
+/*******************************************************************
+ *   _________     _____      _____    ____  _____    ___  ____    *
+ *  |_   ___  |  |_   _|     |_   _|  |_   \|_   _|  |_  ||_  _|   *
+ *    | |_  \_|    | |         | |      |   \ | |      | |_/ /     *
+ *    |  _|        | |   _     | |      | |\ \| |      |  __'.     *
+ *   _| |_        _| |__/ |   _| |_    _| |_\   |_    _| |  \ \_   *
+ *  |_____|      |________|  |_____|  |_____|\____|  |____||____|  *
+ *                                                                 *
+ *******************************************************************
+ *                                                                 *
+ *  flink userspace library, subdevice function "stepper motor"    *
+ *                                                                 *
+ *******************************************************************/
  
 /** @file stepperMotor.c
  *  @brief flink userspace library, subdevice function "stepperMotor".
@@ -26,14 +26,14 @@
 #include "error.h"
 #include "log.h"
 
-#define LOCAL_CONF_OFFSET 0 //number of first register with one cannel
-#define LOCAL_CONF_SET_ATOMIC_OFFSET 1 //number to set bit(s) atomic with one cannel
-#define LOCAL_CONF_RESET_ATOMIC_OFFSET 2 //number to reset bit(s) atomic with one cannel
-#define PRESCALER_START_OFFSET 3 //number of first register with one cannel
-#define PRESCALER_TOP_OFFSET 4 //number of first register with one cannel
-#define ACCELERATION_OFFSET 5 //number of first register with one cannel
-#define STEPS_TO_DO_OFFSET 6 //number of first register with one cannel
-#define STEPS_DONE_OFFSET 7 //number of first register with one cannel
+#define LOCAL_CONF_OFFSET 0              //number of first register with one channel
+#define LOCAL_CONF_SET_ATOMIC_OFFSET 1   //number to set bit(s) atomic with one channel
+#define LOCAL_CONF_RESET_ATOMIC_OFFSET 2 //number to reset bit(s) atomic with one channel
+#define PRESCALER_START_OFFSET 3         //number of first register with one channel
+#define PRESCALER_TOP_OFFSET 4           //number of first register with one channel
+#define ACCELERATION_OFFSET 5            //number of first register with one channel
+#define STEPS_TO_DO_OFFSET 6             //number of first register with one channel
+#define STEPS_DONE_OFFSET 7              //number of first register with one channel
 
 // ========================================================================
 //                          private functions
@@ -267,7 +267,7 @@ int flink_stepperMotor_get_steps_have_done(flink_subdev* subdev, uint32_t channe
 }
 
 /**
- * @brief Global reset steppcounter a flink steppermotor device.
+ * @brief Global reset step counter a flink steppermotor device.
  * @param subdev: Subdevice to reset stepps
  * @return int: 0 on success, else -1.
  */

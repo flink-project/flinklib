@@ -149,10 +149,10 @@ int flink_steppermotor_global_step_reset(flink_subdev* subdev);
 // Reflective sensor
 int flink_reflectivesensor_get_resolution(flink_subdev* subdev, uint32_t* resolution);
 int flink_reflectivesensor_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* value);
-int flink_reflectivesensor_set_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value);
-int flink_reflectivesensor_get_upper_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value);
-int flink_reflectivesensor_set_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t value);
-int flink_reflectivesensor_get_lower_hysterese(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+int flink_reflectivesensor_set_upper_level_int(flink_subdev* subdev, uint32_t channel, uint32_t value);
+int flink_reflectivesensor_get_upper_level_int(flink_subdev* subdev, uint32_t channel, uint32_t* value);
+int flink_reflectivesensor_set_lower_level_int(flink_subdev* subdev, uint32_t channel, uint32_t value);
+int flink_reflectivesensor_get_lower_level_int(flink_subdev* subdev, uint32_t channel, uint32_t* value);
 
 // Interrupt
 int flink_register_irq(flink_dev *dev, uint32_t irq_number);
