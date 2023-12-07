@@ -59,7 +59,7 @@ int flink_wd_get_status(flink_subdev* subdev, uint8_t* status){
 	
 	dbg_print("Reading WD status from subdevice %d\n", subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
+	offset = STATUS_OFFSET;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 	
 	if(flink_read_bit(subdev, offset, 0, status)) {
@@ -81,7 +81,7 @@ int flink_wd_set_counter(flink_subdev* subdev, uint32_t counter){
 	
 	dbg_print("Setting WD counter on subdevice %d to %d (%x)\n", subdev->id, counter, counter);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + 2 * REGISTER_WITH;
+	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 	
 	if(flink_write(subdev, offset, REGISTER_WITH, &counter) != REGISTER_WITH) {
@@ -103,10 +103,10 @@ int flink_wd_arm(flink_subdev* subdev){
 
 	dbg_print("[DEBUG] Arming WD (subdevice %d)\n", subdev->id);
 	
-	offset = HEADER_SIZE + SUBHEADER_SIZE + REGISTER_WITH;
+	offset = CONFIG_OFFSET;
 	dbg_print("  --> calculated offset is 0x%x!\n", offset);
 	
-	if(flink_write_bit(subdev, offset, 1, &arm)) {
+	if(flink_write_bit(subdev, offset, 0, &arm)) {
 		libc_error();
 		return EXIT_ERROR;
 	}
