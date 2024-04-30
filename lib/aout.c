@@ -52,7 +52,7 @@ int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution){
  * @param value: Contains the digitized value of the channel output.
  * @return int: 0 on success, -1 in case of failure.
  */
-int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t value){
+int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, int32_t value){
 	uint32_t offset;
 
 	dbg_print("Get Value of analog out for channel %d on subdevice %d\n", subdev->id, channel);

@@ -95,7 +95,7 @@ int flink_analog_in_get_value(flink_subdev* subdev, uint32_t channel, uint32_t* 
 
 // Analog output
 int flink_analog_out_get_resolution(flink_subdev* subdev, uint32_t* resolution);
-int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, uint32_t value);
+int flink_analog_out_set_value(flink_subdev* subdev, uint32_t channel, int32_t value);
 
 // Digital in-/output
 #define FLINK_OUTPUT 1
