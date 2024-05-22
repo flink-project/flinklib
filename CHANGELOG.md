@@ -5,10 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 ## Unreleased
-(v1.2.0 targeted for 2024-06-30) ([Github compare v1.1.1...master](https://github.com/flink-project/flinklib/compare/v1.1.1...master))
+(v1.2.0 targeted for 2025-01-30) ([Github compare v1.1.2...master](https://github.com/flink-project/flinklib/compare/v1.1.2...master))
 
 ### Added Features
-......
+
+
+## v1.1.2
+(2024-05-22) ([GitHub compare v1.1.1...v1.1.2](https://github.com/flink-project/flinklib/compare/v1.1.1...v1.1.2))
+
+### Added Features
+* Allow negative values on analog out 
 
 
 ## v1.1.1
