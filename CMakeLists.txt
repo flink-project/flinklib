@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(flinklib)
+project(flink)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -20,7 +20,7 @@ if(CMAKE_BUILD_TYPE MATCHES "Debug|DEBUG")
 endif()
 
 if(LOAD_CMAKE_MODULES_LIB)
-  checkout_cmake_modules_lib_version(8fcde84)
+  checkout_cmake_modules_lib_version(504ffe3)
 endif()
 
 
