@@ -1,58 +1,58 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.14)
 
-project(flink)
+include(cmake/git.cmake)
 
-set(CMAKE_CXX_STANDARD 14)
+version_from_git(GIT_VERSION)
+message("git version: ${GIT_VERSION}")
 
+project(flink LANGUAGES C VERSION ${GIT_VERSION})
 
-## Load CMake modules library at specified version
-set(LOAD_CMAKE_MODULES_LIB TRUE CACHE BOOL "TRUE if the cmake-modules library should be loaded.")
+include(GNUInstallDirs)
+include(CMakePackageConfigHelpers)
 
-if(LOAD_CMAKE_MODULES_LIB)
-  include(cmake/CMakeModulesLibLoader.cmake)
-  load_cmake_modules_lib(https://github.com/eeros-project/cmake-modules.git)
-endif()
-
-include(CMakeModulesLib)
-
-if(CMAKE_BUILD_TYPE MATCHES "Debug|DEBUG")
-  logger_on()
-endif()
-
-if(LOAD_CMAKE_MODULES_LIB)
-  checkout_cmake_modules_lib_version(504ffe3)
-endif()
-
-
-## Fetch the version information from git tag
-include(VersioningHelpers)
-setLibraryVersion()
-
-
-## Create the package files
-createPackageFiles(flinkConfig.cmake.in include/ lib/)
-
+add_library(${PROJECT_NAME} SHARED)
+set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${GIT_VERSION} SOVERSION ${PROJECT_VERSION_MAJOR} OUTPUT_NAME ${PROJECT_NAME} EXPORT_NAME ${PROJECT_NAME})
 
 add_subdirectory(flinkinterface)
 add_subdirectory(lib)
 add_subdirectory(utils)
 add_subdirectory(test)
 
-INSTALL(FILES 
-	${CMAKE_CURRENT_SOURCE_DIR}/include/flinklib.h 
-	${CMAKE_CURRENT_SOURCE_DIR}/include/flinkioctl.h 
-	${CMAKE_CURRENT_BINARY_DIR}/flinkinterface/flink_funcid.h
-	${CMAKE_CURRENT_BINARY_DIR}/flinkinterface/flinkioctl_cmd.h
-	${CMAKE_CURRENT_SOURCE_DIR}/lib/types.h 
-	DESTINATION include)
+target_include_directories(${PROJECT_NAME}
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>
+  PUBLIC $<BUILD_INTERFACE:${CMAKE_BINARY_DIR}/flinkinterface> $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}>)
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_14)
+write_basic_package_version_file(
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  COMPATIBILITY AnyNewerVersion
+)
+
+install(FILES
+  ${CMAKE_CURRENT_BINARY_DIR}/${PROJECT_NAME}ConfigVersion.cmake
+  ${CMAKE_CURRENT_SOURCE_DIR}/cmake/${PROJECT_NAME}Config.cmake
+  DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/${PROJECT_NAME}
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(DIRECTORY ${CMAKE_BINARY_DIR}/flinkinterface/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME} FILES_MATCHING PATTERN "*.h")
+
+install(TARGETS "${PROJECT_NAME}"
+  EXPORT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+  ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(EXPORT ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME})
 
 
 ## Doxygen documentation target (make doc)
 find_package(Doxygen)
 if(DOXYGEN_FOUND)
-	configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
-	add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
-		WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-		COMMENT "Generating API documentation with Doxygen" VERBATIM )
+  configure_file(doc/Doxyfile.in ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile @ONLY)
+  add_custom_target(doc ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    COMMENT "Generating API documentation with Doxygen" VERBATIM )
 endif(DOXYGEN_FOUND)
 
