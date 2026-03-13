@@ -37,8 +37,7 @@ target_link_libraries(flinkinterrupthandler PRIVATE ${PROJECT_NAME})
 add_executable(flinkinterruptmultiplexer flinkinterruptmultiplexer.c)
 target_link_libraries(flinkinterruptmultiplexer PRIVATE ${PROJECT_NAME})
 
-cmake_path(RELATIVE_PATH CMAKE_CURRENT_LIST_DIR BASE_DIRECTORY "${PROJECT_SOURCE_DIR}" OUTPUT_VARIABLE "relpath")
 install(TARGETS
   lsflink flinkinfo flinkanaloginput flinkanalogoutput flinkdio flinkpwm flinkcounter
   flinkwd flinkppwa flinkreflectivesensoren flinksteppermotor flinkinterrupthandler flinkinterruptmultiplexer
-  RUNTIME DESTINATION ${CMAKE_INSTALL_DATADIR}/${PROJECT_NAME}/${relpath})
+  RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
